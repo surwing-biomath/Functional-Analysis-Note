@@ -1,0 +1,1425 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+
+
+\title{Functional Analysis Note}
+\author{Shuo Wang}
+\date{Dec. 2023}
+
+
+\usepackage{alltt}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amsopn}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{mathdots}
+\usepackage{mathtools}
+\usepackage{microtype}
+\usepackage{multirow}
+\usepackage{pdflscape}
+\usepackage{pgfplots}
+\usepackage{siunitx}
+\usepackage{slashed}
+\usepackage{tabularx}
+\usepackage{tikz}
+\usepackage{tkz-euclide}
+\usepackage[normalem]{ulem}
+\usepackage[all]{xy}
+\usepackage{imakeidx}
+\usepackage[backend=bibtex]{biblatex}
+
+\makeindex[intoc, title=Index]
+\indexsetup{othercode={\lhead{\emph{Index}}}}
+
+
+
+% Theorems
+\theoremstyle{definition}
+\newtheorem*{axiom}{Axiom}
+\newtheorem*{claim}{Claim}
+\newtheorem*{cor}{Corollary}
+\newtheorem*{conjecture}{Conjecture}
+\newtheorem*{defi}{Definition}
+\newtheorem*{eg}{Example}
+\newtheorem*{ex}{Exercise}
+\newtheorem*{fact}{Fact}
+\newtheorem*{lemma}{Lemma}
+\newtheorem*{notation}{Notation}
+\newtheorem*{prop}{Proposition}
+\newtheorem*{question}{Question}
+\newtheorem*{thm}{Theorem}
+\newtheorem*{assumption}{Assumption}
+\newtheorem*{ppt}{Property}
+\newtheorem{so}{Solution}
+
+\newtheorem*{rmk}{Remark}
+\newtheorem*{exercise}{Exercise}
+
+\newtheorem{nthm}{Theorem}[section]
+\newtheorem{nlemma}[nthm]{Lemma}
+\newtheorem{nprop}[nthm]{Proposition}
+\newtheorem{ncor}[nthm]{Corollary}
+
+
+\renewcommand{\labelitemi}{--}
+\renewcommand{\labelitemii}{$\circ$}
+\renewcommand{\labelenumi}{(\roman{*})}
+
+\let\stdsection\section
+\renewcommand\section{\newpage\stdsection}
+
+\newcommand\qedsym{\hfill\ensuremath{\square}}
+% Strike through
+\def\st{\bgroup \ULdepth=-.55ex \ULset}
+
+
+
+
+\DeclareMathOperator{\card}{card}
+\DeclareMathOperator{\ch}{ch}
+\DeclareMathOperator{\clu}{cl}
+\DeclareMathOperator{\cls}{\overline{\mathrm{span}}}
+\DeclareMathOperator{\conv}{conv}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\diam}{diam}
+\DeclareMathOperator{\Diff}{Diff}
+\DeclareMathOperator{\erf}{erf}
+\DeclareMathOperator*{\esssup}{ess\,sup}
+\DeclareMathOperator{\Frac}{Frac}
+\DeclareMathOperator{\Im}{Im}
+\DeclareMathOperator{\Ind}{Ind}
+\DeclareMathOperator{\Int}{Int}
+\DeclareMathOperator{\Isom}{Isom}
+\DeclareMathOperator{\lcm}{lcm}
+\DeclareMathOperator{\length}{length}
+\DeclareMathOperator{\Maps}{Maps}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\rel}{rel}
+\DeclareMathOperator{\Re}{Re}
+\DeclareMathOperator{\rk}{rk}
+\DeclareMathOperator{\sech}{sech}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\supp}{supp}
+
+
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\section{Introduction}
+\pagenumbering{roman}
+
+
+This is the lecture note of Functional Analysis course in semeste A in 2023/24. The lecturer of this course is Prof. Laurent Mertz.
+
+The origin of functional analysis started from the study of function whose inputs are functions. Mathematician used "functional" to represent this special function: the function of functions.
+
+\section{\textbf{Normed linear spaces and Banach Spaces}}
+\begin{defi}[linear space]
+    $X$ is a vector space over a scaler field $\K$ ($\R$ or $\C$) if $X$ is a set equipped with two operations:
+    \begin{enumerate}
+\item (addition) a map from $X\times X$ to $X$\\
+\item (scalar multiplication ) a map from $\K\times X$ to $X$
+    \end{enumerate}
+\end{defi}
+\begin{rmk}
+    A vector space $X$ is a module over a special ring: field, so $X$ is a commutative group with scalar multiplication.
+\end{rmk}
+\begin{ppt}
+    \begin{enumerate}
+        \item $\forall x\in X$, $0_\K x=0_X$
+        \item $\forall x\in X$, $(-1_\K) x=-x$
+    \end{enumerate}
+\end{ppt}
+\begin{eg}
+    \begin{enumerate}
+        \item set of polynomials on $\R$ or set of multivariate polynomials on $\R^N$\\
+        \item space $\mathcal{C}(\R^N,\K)$ of continuous functions taking values in $\K$\\
+        \item set of sequences on $\K$: $\{\{a_n\}_{n\geq 1}: \mbox{ where } a_n\in \K, \forall n\geq 1\}$
+        \item $(\Omega,\cF,\mu)$ where $\Omega\subseteq \R^N$ is open bounded, $\cF=\cB(\Omega)$ is the Borel algebra, and $\mu$ is a measure, then $X=\{f\in \cC(\Omega,\R): \int \abs{f}\,\rd\mu\leo \}$
+    \end{enumerate}
+\end{eg}
+\begin{defi}[subspace]
+    Let $Y\subseteq X$ be a subset of a linear sapce $X$, then $Y$ is a subspace if \[\forall x,y\in Y, \forall \lambda\in \K, \quad x+\lambda y\in Y\]
+\end{defi}
+\begin{eg}
+    \begin{enumerate}
+        \item $Y=\{0_X\}$ is the smallest subspace
+        \item if $Y_1$ and $Y_2$ are two subspaces, then \[Y_1+Y_2\trieq\{y_1+y_2: y_1\in Y_1 \mbox{ and }y_2\in Y_2\}\] is a subspace of $X$
+        \item if $\{Y_\theta: \theta\in \rI\}$ is a collection of subspaces of $X$, then $\underset{\theta\in\rI}{\bigcap} Y_{\theta}$ is a subspace of $X$
+    \end{enumerate}
+\end{eg}
+
+\begin{defi}[linear span]
+    Let $S\subseteq X$, then
+    \[ \mathrm{span}(S)=\mbox{ set of linear combinations of elements in }S \]
+\end{defi}
+then $z\in \mathrm{span}(S)\\
+\iff 
+\exists N\in\N, \exists \lambda_1,\ldots,\lambda_N\in \K,\exists x_1,\ldots,x_N\in X, \quad z=\sum\limits_{k=1}^N \lambda_k x_k$.
+Clearly, $\mathrm{span}(S)$ is the smallest linear space containing $S$, and
+\[ \\mathrm{span} (S)=\left\{\sum\limits_{i=1}^N \lambda_{1}x_{i}: \lambda_{i}\in\K,x_{i}\in S,N\geq 1\right\} \]
+\begin{defi}[linear maps]
+Let $X_{1}$ and $X_{2}$ be two $\K-$linear spaces, $T: X_{1}\to X_{2}$ is a linear map if
+\[ \forall x,y\in X_{1}, \forall \lambda\in \K,\quad T(x+\lambda y)=T(x)+\lambda T(y) \]
+    we say that $X_{1}$ and $X_{2}$ are isomorphic if there exists a bijective linear map between $X_{1}$ and $X_{2}$.
+\end{defi}
+\begin{ppt}
+    \begin{enumerate}
+        \item if $Y_{1}\subseteq X_{1}$ is a subspace of $X_{1}$, then $T(Y_{1})$ is a subspace of $X_{2}$
+        \item if $Y_{2}\in X_{2}$ is a subspace of $X_{2}$, then $T^{-1}(Y_{2})$ is a subspace of $X_{1}$
+    \end{enumerate}
+\end{ppt}
+\begin{defi}[convex set]
+    Let $\K=\R$, $X$ is a linear space. Let $S\subseteq X$, we say that $S$ is convex if \[ \forall t\in [0,1], \forall x,y\in S,\quad (1-t)x+ty\in S\]
+\end{defi}
+\begin{eg}
+    $X=\R^2, \K=\R$
+    \begin{enumerate}
+        \item $\left\{ (x,y)\in R^2: (x-a)^2+(y-b)^2\leq 1 \right\}$
+        \item $\left\{ (x,y)\in \R: 0\leq y\leq \min\{x,-x+2\}\right\}$
+    \end{enumerate}
+\end{eg}
+
+\begin{defi}[convex combination]
+$z$ is a convex combination of  $x_{1},\ldots,x_{n}$ if it can be written as $\ss_{k=1}^{N}t_{k}x_{k}$, where $t_{k}\in [0,1]$ and $\ss_{k=1}^{N}t_{k}=1$
+\end{defi}
+\begin{ppt}
+    \begin{enumerate}
+        \item $\brac{S_{\theta}: \theta\in\rI}$ is a collection of convex sets in $X$, then $\underset{\theta\in\rI}{\bigcap} S_{\theta}$ is a convex set in $X$
+        \item if $T: X_{1}\to X_{2}$ is a linear map and $S$ is a convex subset of $X_{1}$, then $T(S)$ is a convex subset of $X_{2}$
+        \item if $R\in X_{2}$ is convex, then $T^{-1}(R)$ is convex
+    \end{enumerate}
+\end{ppt}
+\begin{defi}[convex hull]
+    Let $S\in X$ be a subset of the linear sapce $X$, then the smallest convex set containing $S$ which is also the intersection of all convex sets containing $S$ can be characterized as \[ \mathrm{CH}(S) =\brac{\ss_{j=1}^{N}t_{j}x_{j}: x_{j}\in S, N\geq 1, t_{j}\in [0,1],\quad \ss_{j=1}^{N}t_{j}=1} \]
+\end{defi}
+\begin{defi}[normed linear space]
+$X$ is a normed linear space if $X$ is a linear space over $\K=\R$ or $\C$ and equipped with a norm $N: X\to \R_{+}$
+\begin{enumerate}
+    \item $\forall x\in X, N(X)\geq 0$\\
+         $\forall x\in X, N(x)=0 \iff x=0$
+\item $\forall x\in X, \alpha\in \K, N(\alpha x)=\abs{\alpha}N(x)$
+\item $\forall x,y\in X, N(x+y)\leq N(x)+N(y)$
+\end{enumerate}
+\end{defi}
+From now on, $N(x)$ is denoted by $\norm{x}$.
+\begin{nlemma}[triangle inequality]
+    $\forall x,y\in X, \abs{\norm{x}-\norm{y}}\leq \norm{x-y}$
+\end{nlemma}
+\begin{proof}
+    Using the third property of the norm.
+\end{proof}
+Now we can define a metric on $X$
+\begin{defi}[metric]
+A map $\rd$ from $X\times X$ to $\R_{+}$ is called a metric if 
+\begin{enumerate}
+    \item $\rd(x,y)\geq 0$ and $\rd(x,y)=0\iff x=y$
+    \item $\rd(x,y)=\rd(y,x)$
+    \item $\rd(x,z)\leq\rd(x,y)+\rd(y,z)$
+\end{enumerate}
+\end{defi}
+It can be readily checked that the map $(x,y)\mapsto \norm{x-y}$ is a metric. We can use norm to construct metric, use metric to construct topology, and use topology to construct convergence.
+\begin{defi}[equivalence of norms]
+    Two norms $\norm{}_{1}$ and $\norm{}_{2}$ are equivalent if
+    \[ \exists\,0\le c\leo, \forall x\in X, \quad \dd{1}{c}\norm{x}_{1}\leq\norm{x}_{2}\leq c\norm{x}_{1}\]
+    they give rise to the same topology
+\end{defi}
+\begin{defi}[Banach space]
+    Let $(X,\norm)$ be a $\nls$, $\brac{x_{k}}_{k\geq1}$ is a Cauchy sequence if \[ \forall \epsilon\ge 0, \exists N_{\epsilon}\in \N, \forall p,q\ge N_{\epsilon}\quad\norm{x_{p}-x_{q}}\leq \epsilon\]
+    we say $X$ is complete is every Cauchy sequence converges in $X$. A Banach space is defined as a complete $\nls$
+\end{defi}
+\begin{eg}
+    \begin{enumerate}
+        \item $\ell^{\oo}=\left\{  \left\{  a_{j}\right\}_{j\geq 1}: a_{j}\in \K,\quad \underset{j}{\sup }\left\lvert a_{j} \right\rvert \textless\infty  \right\}  $ is complete\\
+        \item $\ell ^{p} =\left\{ \left\{ a_{j} \right\}_{j \geqslant 1},a_{j}\in \mathbb{K}, \sum\limits_{j} \left\lvert a_{j} \right\rvert^{p}\textless\infty     \right\}$ is complete\\
+        \item  $(M,d)$ metric space, $\mathcal{C}_{0}(M)=\left\{ f: M \to \mathbb{C} , f \mbox{ is continuous and }f \mbox{ has compact support} \right\}  $ \\
+        $\left\lVert f \right\rVert _{\infty }=\sup \left\{ \left\lvert f(x) \right\rvert:x \in M  \right\} $ is not complete (whereas $M$ is compact )
+    \end{enumerate}
+\end{eg}
+
+we show that
+$\ell ^{\infty }= \left\{ \left\{ a_{j} \right\}_{j \geqslant 1}, a_{j} \in \mathbb{K},\underset{j}{\sup }\textless\infty    \right\} $ is complete
+\begin{proof}
+ Let $x^{n}_{n \geqslant 1}$ be a Cauche sequence in $\ell ^{\infty }$. For each $n \geqslant 1$, $x_{n}=\left\{ x_{j}^{n} \right\}_{j \geqslant 1} $.
+ $\forall \epsilon \textgreater 1, \exists N_{\epsilon }\in \mathbb{N} , \forall p,q \geqslant N_{\epsilon }, \quad \left\lVert x^p-x^q \right\rVert \leqslant \epsilon  $
+which means $\underset{j}{\sup } \left\lvert x_j^p-x_j^q \right\rvert \leqslant \epsilon  $.\\
+Step \uppercase\expandafter{\romannumeral 1}: identify a candidate $x$\\
+Step \uppercase\expandafter{\romannumeral 2}: show that $x^n \to x$
+\begin{claim}
+ With $j$ fixed, for each $j \geqslant 1, \quad \left\{ x_j^n \right\}_{n \geqslant 1} $ is a Cauchy sequence in $\mathbb{K} $ , so for each $j \geqslant  1, x_j^n \to x_j$ as $n \to  \infty $. The candidate is $x=\left\{ x_j \right\}_{j \geqslant 1
+ } $.\\
+ check that $x \in \ell ^\infty $\\
+ for each $j$, $\left\lvert x_j \right\rvert =\lim\limits_{n \to \infty}\left\lvert x_j^n \right\rvert \leqslant 
+ \overline{\lim\limits_{n \to \infty} }\underset{j}{\sup } \left\lvert x_j^n \right\rvert  \leqslant C_0$ which holds by thefact that Cauchy sequence is bounded.\\
+ Step \uppercase\expandafter{\romannumeral 2} Since $x^n$ is Cauchy, $\forall \epsilon \textgreater 0, \exists N_{\epsilon }\in \mathbb{N} , \forall p,q \geqslant 
+ N_{\epsilon }, \quad \left\lVert x^p-x^q \right\rVert=\underset{j}{\sup }\left\lvert x_j^p-x_j^q \right\rvert \leqslant \epsilon $, so for each
+ $j \geqslant 1$, $\left\lvert x_j^p-x_j^q \right\rvert \leqslant \epsilon  $. Take $q \to \infty $, \[ \forall \epsilon \textgreater 0,
+ \exists N_{\epsilon }\in \mathbb{N} , \forall p \geqslant N_{\epsilon }, \quad \left\lvert x_j^p-x_j \right\rvert \leqslant \epsilon ,\mbox{ for each }j \geqslant 1 \]
+ which implies \[\forall \epsilon \geqslant 0,\exists N_{\epsilon }\in \mathbb{N} ,\forall p \geqslant N_{\epsilon }, \quad \underset{j}{\sup }\left\lvert x_j^p-x_j^q \right\rvert \leqslant \epsilon  \]
+ That implies $\left\lVert x_n-x \right\rVert \to 0 $              
+\end{claim}    
+\end{proof} 
+we show that
+$\ell ^{p }= \left\{ \left\{ a_{j} \right\}_{j \geqslant 1}, a_{j} \in \mathbb{K},\sum\limits_{j=1}^{\infty }\left\lvert a_j \right\rvert^p \textless\infty      \right\} $ is complete
+\begin{proof}
+ Let $\left\{ x^n \right\}_{n \geqslant 1} $ be a Cauchy sequence in $\ell ^p$,\[\forall \epsilon \textgreater 0,\exists N_{\epsilon }\in \mathbb{N} ,\forall p,q \geqslant N_{\epsilon },\quad 
+ \left( \sum\limits_{j=1}^{\infty }\left\lvert x_j^p-x_j^q \right\rvert^p   \right)^{1/p} \textless\infty  \]
+ This implies for each $j \geqslant 1$\[\forall \epsilon \geqslant 0,\exists N_{\epsilon }\in \mathbb{N} ,\forall p,q \geqslant N_{\epsilon },\quad \left\lvert x_j^p-x_j^q \right\rvert \leqslant \epsilon  \]
+ Again $\left\{ x_j^n \right\}_{n \geqslant 1} $ is a Cauchy sequence in $\mathbb{K} $, we choose $x=\left\{ x_j \right\}_{j \geqslant 1} $ as the candidate.\\
+ Step \uppercase\expandafter{\romannumeral 2}: For $K \in \mathbb{N} $,\[\sum\limits_{k=1}^{K}\left\lvert x_k \right\rvert^p =\lim\limits_{n \to \infty} \sum\limits_{k=1}^{K} \left\lvert x_k^n \right\rvert^p \geqslant \overline{\lim\limits_{n \to \infty} } \left\lVert x^n \right\rVert^p   \leqslant C_0\]
+ where $C_0$ is a constant not dependent on $K$, so $\sum\limits_{k=1}^{\infty }\textless\infty  $.\\
+ From Cauchy property, we deduce that \[\forall \epsilon \textgreater 0,\exists N_{\epsilon }\in \mathbb{N} ,\forall p,q \geqslant N_{\epsilon }, \forall K, \quad \left( \sum\limits_{k=1}^{K}\left\lvert x_j^p-x_J^q \right\rvert^p   \right)^{1/p}\leqslant \epsilon  \]
+ which implies \[\forall \epsilon \textgreater 0,\exists N_{\epsilon }\in \mathbb{N} ,\forall p \geqslant N_{\epsilon },\forall K,\quad \left( \sum\limits_{k=1}^{K}\left\lvert x_j^p-x_j^q \right\rvert^p   \right)^{1/p} \leqslant \epsilon  \]
+ which implies \[\forall \epsilon \textgreater 0,\exists N_{\epsilon }\in \mathbb{N} ,\forall p \geqslant N_{\epsilon },\quad \left( \sum\limits_{k=1}^{\infty }\left\lvert x_j^p-x_j \right\rvert^p   \right)^{1/p} \leqslant\infty \]
+ That $x^n \to x$ in $\ell ^p$             
+\end{proof}
+
+
+\section{\textbf{Zorn's lemma}}
+\begin{defi}[relation]
+ $X$ is a nonempry set, a relation $R$ on $X$ is a subset $\mathcal{G}_{R}\subset X \times X$
+ \[xRy \iff \left( x,y \right)\in \mathcal{G}_{R} \]    
+\end{defi} 
+\begin{eg}
+ $\Omega $ is a set, $X=\mathcal{P}(\Omega )$ is the power set of $X$. $\forall A,B \in \mathcal{P}(\Omega )$, $ARB \iff A \in B$
+ \[\mathcal{G}_{R}=\left\{ \left( A,B \right)\in \mathcal{P}_{\Omega }\times \mathcal{P}_{\Omega }, A \in B  \right\} \]     
+\end{eg} 
+\begin{defi}[partial order]
+ we say that $R$ is a partial order on $X$ if it satisfies the following properties:
+ \begin{enumerate}
+ \item (reflexive):  $\forall x \in X, xRx$ \\ 
+ \item (anti-symmetric): $\forall x,y \in X, xRy \mbox{ and }yRx \Rightarrow x-y$\\
+ \item (transitive): $\forall x,y,z \in X, xRy \mbox{ and }yRz \Rightarrow xRz$  
+ \end{enumerate}    
+ $R$ becomes a totally ordered relation if in addition to a),b), and c)
+ \begin{enumerate}
+ \item $\forall x,y \in X, xRy \mbox{ or }yRx$
+ \end{enumerate}  
+\end{defi}
+\begin{eg}
+ partial order in $\mathbb{R} ^2$: Let $x=\left( x_1,x_2 \right)\in \mathbb{R} ^2, y=\left( y_1,y_2 \right)\in \mathbb{R} ^2  $. We write 
+ $xRy$ if $x_1 \leqslant y_1$ and $x_2 \leqslant y_2$ and use the notation $\left( x_1,x_2 \right)\textless \left( y_1,y_2 \right)  $    
+\end{eg}
+
+\begin{rmk}
+    We cannot compare two points $\left( x_1,x_{2} \right) and \left( y_1,y_{2} \right)   $ when $x_1 \textgreater x_2$ or $y_1 \textgreater y_2$  
+\end{rmk} 
+
+\begin{defi}
+    Let $X$ be with a partial order $\textless $. Consider $A \subseteq X$ and $z \in X$. We say that $z$ is an upper bound for $A$ if $\forall  a \in A, a \textless z$       
+\end{defi} 
+\begin{eg}
+
+\tikzset{every picture/.style={line width=0.5pt}} %set default line width to 0.75pt        
+
+\begin{tikzpicture}[x=0.5pt,y=0.5pt,yscale=-1,xscale=1]
+%uncomment if require: \path (0,300); %set diagram left start at 0, and has height of 300
+
+%Shape: Free Drawing [id:dp2771709977118808] 
+\draw  [line width=3] [line join = round][line cap = round] (146,115.6) .. controls (133.2,115.6) and (124.22,122.99) .. (113,128.6) .. controls (79.67,145.27) and (70.54,159.25) .. (72,198.6) .. controls (72.13,201.99) and (73.59,211.5) .. (75,214.6) .. controls (86.93,240.84) and (122.56,273.49) .. (151,280.6) .. controls (193.19,291.15) and (246.76,268.84) .. (276,239.6) .. controls (292.89,222.71) and (296.14,202.89) .. (294,178.6) .. controls (293.65,174.62) and (287.59,167.3) .. (286,163.6) .. controls (282.66,155.8) and (277.26,146.88) .. (270,141.6) .. controls (267.95,140.11) and (265.03,140.12) .. (263,138.6) .. controls (262.16,137.97) and (262.92,136.12) .. (262,135.6) .. controls (239.36,122.66) and (211.85,123.4) .. (187,122.6) .. controls (172.23,122.12) and (151.7,115.6) .. (140,115.6) ;
+%Straight Lines [id:da6826495148384055] 
+\draw    (51,114.6) -- (390,114.6) ;
+%Straight Lines [id:da9727761688388668] 
+\draw    (294,52.6) -- (294,295.6) ;
+%Shape: Free Drawing [id:dp44716361156381934] 
+\draw  [line width=3] [line join = round][line cap = round] (351,45.6) .. controls (343.62,52.98) and (335.82,59.9) .. (328,66.6) .. controls (325.39,68.84) and (321.73,74.6) .. (320,74.6) ;
+%Shape: Free Drawing [id:dp08498975738762415] 
+\draw  [line width=3] [line join = round][line cap = round] (382,65.6) .. controls (372.57,77.13) and (360.34,86.25) .. (348,94.6) .. controls (347.31,95.07) and (337,99.53) .. (337,102.6) ;
+%Shape: Free Drawing [id:dp24301618509092648] 
+\draw  [line width=3] [line join = round][line cap = round] (326,28.6) .. controls (326,37.18) and (308.98,59.62) .. (304,65.6) .. controls (301.4,68.72) and (296,71.83) .. (296,75.6) ;
+%Shape: Free Drawing [id:dp11363271776339157] 
+\draw  [line width=3] [line join = round][line cap = round] (417,73.6) .. controls (406.39,91.28) and (391.37,99.19) .. (374,110.6) .. controls (369.72,113.41) and (360.31,116.99) .. (358,121.6) ;
+%Shape: Free Drawing [id:dp7573235819343314] 
+\draw  [line width=3] [line join = round][line cap = round] (332,62.6) .. controls (324.16,71.74) and (314.6,80.35) .. (306,88.6) .. controls (303.44,91.05) and (300.37,92.97) .. (298,95.6) .. controls (297.2,96.49) and (297.2,98.6) .. (296,98.6) ;
+%Shape: Free Drawing [id:dp9881825491893856] 
+\draw  [line width=3] [line join = round][line cap = round] (321,14.6) .. controls (314.48,24.38) and (307.52,33.58) .. (300,42.6) .. controls (299.63,43.05) and (290,50.81) .. (290,55.6) ;
+%Shape: Free Drawing [id:dp05452315900132865] 
+\draw  [line width=3] [line join = round][line cap = round] (382,21.6) .. controls (371.26,29.65) and (360.2,37.91) .. (350,46.6) .. controls (343.72,51.95) and (333,56.35) .. (333,64.6) ;
+%Shape: Free Drawing [id:dp13953390151926826] 
+\draw  [line width=3] [line join = round][line cap = round] (381,59.6) .. controls (374.17,66.77) and (369.9,80.6) .. (360,80.6) ;
+%Shape: Free Drawing [id:dp49460143705157344] 
+\draw  [line width=3] [line join = round][line cap = round] (404,93.6) .. controls (404,93.6) and (404,93.6) .. (404,93.6) ;
+%Shape: Free Drawing [id:dp569145448926806] 
+\draw  [line width=3] [line join = round][line cap = round] (340,5.6) .. controls (335.67,10.27) and (331.05,14.68) .. (327,19.6) .. controls (326.1,20.69) and (325.41,22.6) .. (324,22.6) ;
+%Shape: Free Drawing [id:dp37393519443324963] 
+\draw  [line width=3] [line join = round][line cap = round] (180,164.6) .. controls (180,175.85) and (165.09,204.9) .. (163,209.6) .. controls (161.24,213.57) and (154,222.8) .. (154,225.6) ;
+%Shape: Free Drawing [id:dp14872477394563366] 
+\draw  [line width=3] [line join = round][line cap = round] (183,166.6) .. controls (189.99,179.03) and (195.41,189.13) .. (199,202.6) .. controls (200.45,208.03) and (205,212.33) .. (205,217.6) ;
+%Shape: Free Drawing [id:dp0658658484529202] 
+\draw  [line width=3] [line join = round][line cap = round] (173,198.6) .. controls (181.67,198.6) and (191.21,195.6) .. (198,195.6) ;
+
+\end{tikzpicture}\\
+Any point in the shaded area is an upper bound for \textbf{A}
+\end{eg} 
+\begin{defi}[maximal element]
+    $A \subseteq X, z \in X$, we say that $z$ is a maximal element if $\forall y \in A, z \textless y, \Rightarrow z=y$   
+\end{defi} 
+\begin{eg}
+    $$\mathcal{S}=\left\{ \left( x,y \right) \in [0,\infty )\times [0,\infty ) : x+y \leqslant 1 \right\} $$
+
+
+
+    \tikzset{every picture/.style={line width=0.75pt}} %set default line width to 0.75pt        
+
+    \begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1]
+    %uncomment if require: \path (0,300); %set diagram left start at 0, and has height of 300
+    
+    %Straight Lines [id:da616894859660871] 
+    \draw    (2,270.6) -- (624,272.59) ;
+    \draw [shift={(626,272.6)}, rotate = 180.18] [color={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.75]    (10.93,-3.29) .. controls (6.95,-1.4) and (3.31,-0.3) .. (0,0) .. controls (3.31,0.3) and (6.95,1.4) .. (10.93,3.29)   ;
+    %Straight Lines [id:da4433615045518242] 
+    \draw    (128,295.6) -- (125.02,38.6) ;
+    \draw [shift={(125,36.6)}, rotate = 89.34] [color={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.75]    (10.93,-3.29) .. controls (6.95,-1.4) and (3.31,-0.3) .. (0,0) .. controls (3.31,0.3) and (6.95,1.4) .. (10.93,3.29)   ;
+    %Straight Lines [id:da9264305532122274] 
+    \draw    (126.5,166.1) -- (246,269.6) ;
+    %Shape: Free Drawing [id:dp1699804438847632] 
+    \draw  [line width=3] [line join = round][line cap = round] (146,186.6) .. controls (143.05,195.44) and (132,197.86) .. (132,205.6) ;
+    %Shape: Free Drawing [id:dp36093872602726984] 
+    \draw  [line width=3] [line join = round][line cap = round] (166,203.6) .. controls (166,211.02) and (148.22,223.38) .. (142,229.6) .. controls (140.95,230.65) and (138.47,230.19) .. (138,231.6) .. controls (137.48,233.16) and (136.1,238.6) .. (134,238.6) ;
+    %Shape: Free Drawing [id:dp1870849757760662] 
+    \draw  [line width=3] [line join = round][line cap = round] (187,227.6) .. controls (184.79,238.67) and (171.35,246.33) .. (164,254.6) .. controls (160.07,259.02) and (155.61,265.8) .. (150,268.6) ;
+    %Shape: Free Drawing [id:dp9006469753292146] 
+    \draw  [line width=3] [line join = round][line cap = round] (211,252.6) .. controls (210.44,254.86) and (202.38,266.6) .. (200,266.6) ;
+    %Shape: Free Drawing [id:dp04265467898284592] 
+    \draw  [color={rgb, 255:red, 222; green, 19; blue, 19 }  ,draw opacity=1 ][line width=3.75] [line join = round][line cap = round] (126,165.6) .. controls (130.48,167.84) and (131.48,171.37) .. (134,173.6) .. controls (143.21,181.74) and (152.56,189.73) .. (162,197.6) .. controls (170.35,204.56) and (177.41,209.01) .. (186,217.6) .. controls (188.15,219.75) and (191.42,225.31) .. (194,226.6) .. controls (196.26,227.73) and (200.19,228.79) .. (202,230.6) .. controls (207.81,236.41) and (214.25,244.02) .. (222,246.6) .. controls (225.58,247.79) and (227.02,252.28) .. (230,254.6) .. controls (232.53,256.57) and (240.62,261.22) .. (242,262.6) .. controls (243.83,264.43) and (250.47,272.6) .. (255,272.6) ;
+    %Shape: Free Drawing [id:dp7873942852735198] 
+    \draw  [color={rgb, 255:red, 222; green, 19; blue, 19 }  ,draw opacity=1 ][line width=3.75] [line join = round][line cap = round] (259,156.6) .. controls (259,175.49) and (242,188.56) .. (242,206.6) ;
+    %Shape: Free Drawing [id:dp7650907844226584] 
+    \draw  [color={rgb, 255:red, 222; green, 19; blue, 19 }  ,draw opacity=1 ][line width=3.75] [line join = round][line cap = round] (230,192.6) .. controls (231.73,198.23) and (235.21,215.02) .. (238,220.6) .. controls (238.3,221.2) and (239.4,220.9) .. (240,220.6) .. controls (247.85,216.67) and (255.05,212) .. (262,206.6) ;
+    %Shape: Free Drawing [id:dp8985105841189249] 
+    \draw  [color={rgb, 255:red, 50; green, 19; blue, 222 }  ,draw opacity=1 ][line width=2.25] [line join = round][line cap = round] (30,185.6) .. controls (23.88,185.6) and (17.31,189.45) .. (14,194.6) .. controls (12.32,197.21) and (14.87,205.56) .. (18,206.6) .. controls (22.27,208.02) and (26.96,207.34) .. (32,208.6) .. controls (34.86,209.31) and (34.41,216.96) .. (34,218.6) .. controls (33.5,220.59) and (14,221.6) .. (12,221.6) ;
+    %Shape: Free Drawing [id:dp30426108549705466] 
+    \draw  [color={rgb, 255:red, 50; green, 19; blue, 222 }  ,draw opacity=1 ][line width=2.25] [line join = round][line cap = round] (50,208.6) .. controls (63.5,212.57) and (83.29,218.18) .. (95,218.6) .. controls (104,218.92) and (122,226.61) .. (122,217.6) ;
+    %Shape: Free Drawing [id:dp7930202986140398] 
+    \draw  [color={rgb, 255:red, 50; green, 19; blue, 222 }  ,draw opacity=1 ][line width=2.25] [line join = round][line cap = round] (89,207.6) .. controls (94.28,207.6) and (95.4,209.76) .. (100,211.6) .. controls (109.6,215.44) and (119.94,217.62) .. (129,222.6) .. controls (131.63,224.05) and (122.99,222.3) .. (120,222.6) .. controls (118.31,222.77) and (116.67,223.27) .. (115,223.6) .. controls (104.41,225.72) and (99.41,225.77) .. (87,226.6) .. controls (86.53,226.63) and (86.33,227.27) .. (86,227.6) ;
+    
+    % Text Node
+    \draw (198,128) node [anchor=north west][inner sep=0.75pt]   [align=left] {\begin{minipage}[lt]{128.01pt}\setlength\topsep{0pt}
+    \begin{center}
+    set of maximal element in S
+    \end{center}
+    
+    \end{minipage}};
+    
+    
+    \end{tikzpicture}
+    
+\end{eg} 
+\begin{rmk}
+    if $R$ is a partial order on $X$, $\mathcal{G}_{R} \subseteq X \times X$. Let $Y \subseteq X$, $\forall x,y \in Y, xRy \mbox{ or }yRx, \left( x,y \right) \mbox{ or }\left( y,x \right)\in \mathcal{G}_R  $, that means $Y$ is totally ordered w.r.t. $R$       
+\end{rmk} 
+\begin{eg}
+    $$\mathcal{S}=\left\{ \left( x,y \right) \in [0,\infty )\times [0,\infty ) : x+y \leqslant 1 \right\} $$
+    
+
+\tikzset{every picture/.style={line width=0.75pt}} %set default line width to 0.75pt        
+
+\begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1]
+%uncomment if require: \path (0,446); %set diagram left start at 0, and has height of 446
+
+%Straight Lines [id:da616894859660871] 
+\draw    (2,270.6) -- (624,272.59) ;
+\draw [shift={(626,272.6)}, rotate = 180.18] [color={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.75]    (10.93,-3.29) .. controls (6.95,-1.4) and (3.31,-0.3) .. (0,0) .. controls (3.31,0.3) and (6.95,1.4) .. (10.93,3.29)   ;
+%Straight Lines [id:da4433615045518242] 
+\draw    (128,295.6) -- (125.02,38.6) ;
+\draw [shift={(125,36.6)}, rotate = 89.34] [color={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.75]    (10.93,-3.29) .. controls (6.95,-1.4) and (3.31,-0.3) .. (0,0) .. controls (3.31,0.3) and (6.95,1.4) .. (10.93,3.29)   ;
+%Straight Lines [id:da9264305532122274] 
+\draw    (126.5,166.1) -- (246,269.6) ;
+%Shape: Free Drawing [id:dp1699804438847632] 
+\draw  [line width=3] [line join = round][line cap = round] (146,186.6) .. controls (143.05,195.44) and (132,197.86) .. (132,205.6) ;
+%Shape: Free Drawing [id:dp36093872602726984] 
+\draw  [line width=3] [line join = round][line cap = round] (166,203.6) .. controls (166,211.02) and (148.22,223.38) .. (142,229.6) .. controls (140.95,230.65) and (138.47,230.19) .. (138,231.6) .. controls (137.48,233.16) and (136.1,238.6) .. (134,238.6) ;
+%Shape: Free Drawing [id:dp1870849757760662] 
+\draw  [line width=3] [line join = round][line cap = round] (187,227.6) .. controls (184.79,238.67) and (171.35,246.33) .. (164,254.6) .. controls (160.07,259.02) and (155.61,265.8) .. (150,268.6) ;
+%Shape: Free Drawing [id:dp9006469753292146] 
+\draw  [line width=3] [line join = round][line cap = round] (211,252.6) .. controls (210.44,254.86) and (202.38,266.6) .. (200,266.6) ;
+%Shape: Free Drawing [id:dp04265467898284592] 
+\draw  [color={rgb, 255:red, 222; green, 19; blue, 19 }  ,draw opacity=1 ][line width=3.75] [line join = round][line cap = round] (126,165.6) .. controls (130.48,167.84) and (131.48,171.37) .. (134,173.6) .. controls (143.21,181.74) and (152.56,189.73) .. (162,197.6) .. controls (170.35,204.56) and (177.41,209.01) .. (186,217.6) .. controls (188.15,219.75) and (191.42,225.31) .. (194,226.6) .. controls (196.26,227.73) and (200.19,228.79) .. (202,230.6) .. controls (207.81,236.41) and (214.25,244.02) .. (222,246.6) .. controls (225.58,247.79) and (227.02,252.28) .. (230,254.6) .. controls (232.53,256.57) and (240.62,261.22) .. (242,262.6) .. controls (243.83,264.43) and (250.47,272.6) .. (255,272.6) ;
+%Shape: Free Drawing [id:dp7873942852735198] 
+\draw  [color={rgb, 255:red, 222; green, 19; blue, 19 }  ,draw opacity=1 ][line width=3.75] [line join = round][line cap = round] (259,156.6) .. controls (259,175.49) and (242,188.56) .. (242,206.6) ;
+%Shape: Free Drawing [id:dp7650907844226584] 
+\draw  [color={rgb, 255:red, 222; green, 19; blue, 19 }  ,draw opacity=1 ][line width=3.75] [line join = round][line cap = round] (230,192.6) .. controls (231.73,198.23) and (235.21,215.02) .. (238,220.6) .. controls (238.3,221.2) and (239.4,220.9) .. (240,220.6) .. controls (247.85,216.67) and (255.05,212) .. (262,206.6) ;
+%Shape: Free Drawing [id:dp8985105841189249] 
+\draw  [color={rgb, 255:red, 50; green, 19; blue, 222 }  ,draw opacity=1 ][line width=2.25] [line join = round][line cap = round] (30,185.6) .. controls (23.88,185.6) and (17.31,189.45) .. (14,194.6) .. controls (12.32,197.21) and (14.87,205.56) .. (18,206.6) .. controls (22.27,208.02) and (26.96,207.34) .. (32,208.6) .. controls (34.86,209.31) and (34.41,216.96) .. (34,218.6) .. controls (33.5,220.59) and (14,221.6) .. (12,221.6) ;
+%Shape: Free Drawing [id:dp30426108549705466] 
+\draw  [color={rgb, 255:red, 50; green, 19; blue, 222 }  ,draw opacity=1 ][line width=2.25] [line join = round][line cap = round] (50,208.6) .. controls (63.5,212.57) and (83.29,218.18) .. (95,218.6) .. controls (104,218.92) and (122,226.61) .. (122,217.6) ;
+%Shape: Free Drawing [id:dp7930202986140398] 
+\draw  [color={rgb, 255:red, 50; green, 19; blue, 222 }  ,draw opacity=1 ][line width=2.25] [line join = round][line cap = round] (89,207.6) .. controls (94.28,207.6) and (95.4,209.76) .. (100,211.6) .. controls (109.6,215.44) and (119.94,217.62) .. (129,222.6) .. controls (131.63,224.05) and (122.99,222.3) .. (120,222.6) .. controls (118.31,222.77) and (116.67,223.27) .. (115,223.6) .. controls (104.41,225.72) and (99.41,225.77) .. (87,226.6) .. controls (86.53,226.63) and (86.33,227.27) .. (86,227.6) ;
+%Shape: Free Drawing [id:dp44658849049037985] 
+\draw  [color={rgb, 255:red, 248; green, 231; blue, 28 }  ,draw opacity=1 ][line width=2.25] [line join = round][line cap = round] (128.6,268.73) .. controls (146.52,253.37) and (169.96,239.38) .. (185.6,223.73) ;
+%Shape: Free Drawing [id:dp1874557774787724] 
+\draw  [color={rgb, 255:red, 248; green, 231; blue, 28 }  ,draw opacity=1 ][line width=2.25] [line join = round][line cap = round] (160.87,333.57) .. controls (170.07,342.77) and (162.91,336.08) .. (161.87,299.57) .. controls (161.7,293.56) and (153.72,284.34) .. (149.87,278.57) .. controls (147.99,275.76) and (146.3,274) .. (144.87,272.57) .. controls (143.49,271.19) and (142.22,265.66) .. (141.87,267.57) .. controls (140.64,274.12) and (141.87,280.9) .. (141.87,287.57) ;
+%Shape: Free Drawing [id:dp9872799406930526] 
+\draw  [color={rgb, 255:red, 248; green, 231; blue, 28 }  ,draw opacity=1 ][line width=2.25] [line join = round][line cap = round] (142.87,267.57) .. controls (142.87,264.25) and (162,279.35) .. (166.87,280.57) ;
+
+% Text Node
+\draw (198,128) node [anchor=north west][inner sep=0.75pt]   [align=left] {\begin{minipage}[lt]{127.98pt}\setlength\topsep{0pt}
+\begin{center}
+set of maximal element in S
+\end{center}
+
+\end{minipage}};
+% Text Node
+\draw (105,344.67) node [anchor=north west][inner sep=0.75pt]   [align=left] {totoally ordered subset of S};
+
+
+\end{tikzpicture}
+
+\end{eg} 
+\begin{nlemma}[zorn's lemma]
+    Let $\left( X, \textless  \right) $ be a nonempty partial order set, if any totally ordered subset $Y$ of $X$ has an 
+    upper bound, then $X$ has a maximal element (at least one)    
+\end{nlemma} 
+\begin{rmk}
+    Zorn's lemma is equivalent to the \textbf{Axiom of Choice}, which can be stated as follows:\\
+For any set $X$ composed of nonempty sets, $\forall A \in X, \exists f: X \mapsto \bigcup\limits_{A \in X} A$ such that $f(A) \in A$   
+\end{rmk} 
+\begin{eg}
+    $X=\left\{ \left\{ 1,2 \right\},\left\{ 0 \right\},\left\{ 3,4 \right\}    \right\} $ when $X$ is finite. $\bigcup\limits_{A \in X} A=\left\{ 0,1,2,3,4 \right\} $. We 
+    define $f(\left\{ 1,2 \right\} )=1, f(\left\{ 0 \right\} )=0, f(\left\{ 3,4 \right\} )=3$.    
+\end{eg} 
+Counterexample: \[X=\left\{ \left( x,y \right)\in \mathbb{R} ^2: x=y  \right\} \] it is not true that any totally ordered subset of $X$ has an upper bound. \\
+Now $X$ be a vector space, we want to prove that $X$ has a basis.
+
+\begin{defi}
+    $\left\{ X_{\theta }\right\}_{\theta \in \mathrm{I} }$ is a basis of $X$ if
+    \begin{enumerate}
+    \item a): $\forall N, \forall \theta _{1},\ldots,\theta _{N} \in \mathrm{I}(\theta_{i}\neq \theta _{j}) \Rightarrow \left\{ x_{\theta_{1}},\ldots,x_{\theta _{N}} \right\}$ is linearly independent.  \\ 
+    \item b): $\mathrm{span}\left\{ x_{\theta } \right\}_{\theta \in \mathrm{I} }=X  $   
+    \end{enumerate}   
+\end{defi} 
+\begin{nthm}
+    Let $X$ be a nonempty vector space, $\exists $ a basis for $X$.   
+\end{nthm} 
+\begin{proof}
+    A simple corollary application of Zorn's lemma.
+\end{proof} 
+
+\section{\textbf{Hahn-Banach theorem}}
+ Let $X$ be an $\mathrm{n.v.s.}$, $\mathbb{K} =\mathbb{R} $  
+\begin{nthm}
+    Consider $Y \subseteq X$ to be a subspace, $l: Y \mapsto \mathbb{R} $ a linear map. Assume $\exists p: X \mapsto \mathbb{R} $ such that:
+    \begin{enumerate}
+    \item $\forall \alpha \textgreater 0, \forall x \in X, \quad P(\alpha x)= \alpha p(x)$  \\ 
+    \item $\forall x,y \in X, \quad p(x+y) \leqslant p(x)+p(y)$ 
+    \end{enumerate}  
+    if $\forall x \in X, l(x)\leqslant p(x)$, then $\exists L: X \mapsto \mathbb{R} $
+    \begin{enumerate}
+    \item $L$ is linear  \\ 
+    \item $L\mid_{Y}=l$ \\ 
+    \item $\forall  x \in X, L(x) \leqslant p(x)$ 
+    \end{enumerate}   
+\end{nthm} 
+\begin{proof}
+    Suppose first that $X$ is spanned by $Y$ and an element $x_0 \not\in Y$, that is, suppose that \[X=
+    \left\{ x=m+\alpha x_0: m \in Y, \alpha \in \mathbb{R}  \right\} \]
+    Since $x_0 \not\in Y$, the above representation of $x \in X$ in the form $x=m+\alpha x_0$ is unique. It follows that, if, for 
+    any real number $c$, we set \[
+        L(x)=L(m+\alpha x_0)=l(m)+\alpha c\]   
+    then $L$ is a real linear functional on $X$ which is an extension of $l$. We have to choose $c$ such that $L(x) \leqslant p(x)$, that is,
+     $l(m)+\alpha c \leqslant p(m+\alpha c)$. The condition is equivalent to the following two conditions:\[l(m/\alpha )+c \leqslant p(x_0+m/\alpha) \mbox{ for }\alpha \textgreater 0 \]
+     \[l(m/(-\alpha ))-c \leqslant p(-x_0+m/(-\alpha )) \mbox{ for }\alpha \leqslant 0\]     
+     To satisfy these conditions, we shall choose $c$ such that \[
+        l(m^{\prime })-p(m ^{\prime}-x_0) \leqslant c \leqslant p(m^{\prime \prime}+x_0)-l(m^{\prime \prime}) \mbox{ for all }m ^{\prime},m^{\prime \prime} \in Y\]
+        uch a choice of $c$ is possible since 
+        \begin{equation*}
+        \begin{split}
+            l(m ^{\prime})+l(m^{\prime \prime})=l(m ^{\prime}+m^{\prime \prime}) &\leqslant p(m ^{\prime}+m ^{\prime \prime} )=p(m ^{\prime} -x_0+m ^{\prime \prime} +x_0)\\
+            & \leqslant p(m ^{\prime} -x_0)+p(m ^{\prime \prime} +x_0)
+        \end{split}
+         \end{equation*} 
+        we have only to choose $c$ between the two numbers \[
+            \underset{m ^{\prime} \in Y}{\sup} l(m ^{\prime} )-p(m ^{\prime} -x_0 ) \mbox{ and }\underset{m ^{\prime \prime} \in Y}{\inf } p(m ^{\prime \prime} +x_0)  -l(m ^{\prime \prime} ) \] \\
+            Consider now the family of all real linear extensions $g$ of $l$ for which the inequalities $g(x)\leqslant p(x)$ holds for all $x$ in the domain 
+            of $g$. We make this family into a partiality ordered family by defining $g \textless h$ to mean that $h$ is an extension of $g$. Then 
+            the Zorn's lemma ensures the existence of a maximal linear extension $g$ of $l$ for which the inequality $g(x)\leqslant p(x)$ holds for 
+            all $x$ in the domain of $g$. We have to prove that the domain $D(g)$ of $g$ coincides with $X$ itself. If it does not, we obtain, taking $D(g)$ as $Y$ and $g$ as $l$, 
+            a proper extension $L$ of $g$ which satisfies $L(x)\textless p(x)$ for all $x$ in the domain of $L$, contrary to the maximality of the linear extension $g$.                          
+\end{proof} 
+
+\section{\textbf{Dual of a \textbf{n.l.s.} }}
+Let $X$ be an $\mathbf{n.l.s.} $  and $\mathbb{K} =\mathbb{R} \mbox{ or }\mathbb{C} $.
+\begin{defi}
+    $l$ is contiunous if $\forall \left\{ x_n \right\}_{n \geqslant 0 } $ converging sequence in $X$ such that $x=\lim\limits_{n \to \infty} x_n \in X $, then $\left\{ l(x_n) \right\}_{n \geqslant 0 } $ 
+    converging in $\mathbb{K} $      
+\end{defi}  
+\begin{rmk}
+    When $X$ is finite dimensional, any linear forms on $X$ is continuous.  
+\end{rmk} 
+\begin{defi}
+    $l$ is bounded if $\exists C_0 \textgreater 0 $ such that $\forall x \in X, \quad \left\lvert l(x) \right\rvert \leqslant C_0 \left\lVert x \right\rVert $   
+\end{defi} 
+\begin{prop}
+    $l: X \to \mathbb{K} \mbox{ linear form }$, then \[l \mbox{ is continuous } \Leftrightarrow l \mbox{ is bounded} \] 
+\end{prop} 
+\begin{proof}
+    $(\Longleftarrow )$ Assume $l$ is bounded. Consider $\left\{ x_n \right\}_{n \geqslant 0  }, x_n \longrightarrow x \mbox{ in }X $, we want to show 
+    that $l(x_n) \longrightarrow l(x) \mbox{ in }\mathbb{K} $. Now $\exists C_0 \textgreater 0 $ such that \[
+        \left\lvert l(x_n)-l(x) \right\rvert=\left\lvert l(x_n-x) \right\rvert \leqslant C_0 \left\lVert x_n-x \right\rVert   \] which shows that $l$ is continuous.\\ 
+        $(\Longrightarrow )$ We prove by contradiction: we assume $$\forall n \in N, \exists x_n \in X, \quad \left\lvert l(x_n) \right\rvert \textgreater n \left\lVert x_n \right\rVert  $$
+        Define $z_n \triangleq \dfrac{x_n}{n \left\lVert x_n \right\rVert }$, then $\left\lVert z_n \right\rVert= \frac{1}{n} $ so $z_n \rightarrow   0 \mbox{ in }X$, 
+        $l(z_n)=\dfrac{l(x_n)}{n \left\lVert x_n \right\rVert } \textgreater 1$, so $l(z_n) \nrightarrow  l(0)=0$       
+\end{proof} 
+\begin{defi}[dual of \textbf{n.l.s.} ]
+    $X ^{\prime} $ to denote the set of continuous linear forms on $X$, which is also the set of bounded linear forms on $X$   
+\end{defi} 
+\begin{ppt}
+    $X ^{\prime} $ is a n.l.s., $l  \in X  ^{\prime} $,
+    \begin{equation}
+    \begin{split}
+       \left\lVert l \right\rVert   & = \underset{x \neq 0}{\sup }  \dfrac{\left\lvert l(x) \right\rvert }{\left\lVert x \right\rVert }\\
+           & = \underset{x \neq 0}{\sup } \left\lvert L(\dfrac{x}{\left\lVert x \right\rVert }) \right\rvert \\
+           & = \underset{\left\lVert y \right\rVert=1 }{\sup }\left\lvert l(y) \right\rvert 
+    \end{split}
+     \end{equation} 
+    $\forall x \in X, \left\lvert l(x) \right\rvert \leqslant \left\lVert l \right\rVert \left\lVert x \right\rVert   $ 
+\end{ppt} 
+\begin{ex}
+    $\left\lVert l \right\rVert $ is a norm on $X ^{\prime} $  
+\end{ex} 
+\begin{prop}
+    $l \in X ^{\prime}, N=\left\{ z \in X, l(z)=0 \right\}  $ \\
+    \begin{enumerate}
+    \item $N$ is a closed linear space  \\ 
+    \item $l \neq 0, \exists x \in X, \forall y \in X, \exists \alpha \in \mathbb{K} , \exists \mu \in N \mbox{ such that }\quad y=\alpha x+\mu $ 
+    \end{enumerate} 
+\end{prop} 
+equivalently, $\exists x \in X, X=\mathbb{K} \left\langle x \right\rangle+N  $ 
+\begin{proof}
+    \begin{enumerate}
+    \item Suppose that $x_n \rightarrow \hat{x} \in X$, then $l(\hat{x})=l(\lim\limits_{n \to \infty}x_n )=\lim\limits_{n \to \infty}l(x_n)=0 $, so $\hat{x} \in N$   \\ 
+    \item $l \neq 0$. $\exists x \in X, \mbox{ such that } l(x) \neq 0$. Let $y \in X$, we want to find $\alpha \in \mathbb{K} , \mu \in N$, such that $y=\alpha x+\mu $ \\
+ Step \uppercase\expandafter{\romannumeral 1}: $l(y)=l(\alpha x+\mu )=\alpha l(x)+l(\mu )$, then the choice for $\alpha $, given $y \in X$, is $\alpha \triangleq \frac{l(y)}{l(x)}$. \\
+Step \uppercase\expandafter{\romannumeral 2}: $y=\dfrac{l(y)}{l(x)}x+\left( y-\dfrac{l(y)}{l(x)}x \right) $, so we choose $\mu =y-\dfrac{l(y)}{l(x)}x$, It is easy to check the uniqueness of the represnetation of $y$ in this form       
+
+\end{enumerate} 
+Now $X=\mathbb{K} \left\langle x \right\rangle \oplus N $. If $X$ is finite dimensional, say $\dim X=n$, then it is easy to find that $N$ is of codimension $1$     
+\end{proof} 
+\begin{prop}
+    $X ^{\prime} $ is always complete, (even if $X$ is not complete ) 
+\end{prop} 
+\begin{proof}
+  $\left\{ l_n \right\} _{n \geqslant 0 }$ Cauchy sequence in $X ^{\prime} $, then \[
+    \forall \epsilon \textgreater 0 , \exists N_{\epsilon } \mbox{ such that }\forall p,q \geqslant N_{\epsilon }, \quad \left\lVert l_{p}-l_{q} \right\rVert \leqslant \epsilon  \]  
+    $\Leftrightarrow $ 
+\begin{align}\label{eq3}
+    \forall \epsilon \textgreater 0 , \exists N_{\epsilon } \mbox{ such that }\forall p,q \geqslant N_{\epsilon }, \quad \underset{x \in X, x \neq 0}{\sup } \left\lvert l_p(x)-l_q(x) \right\rvert \leqslant \epsilon \left\lVert x \right\rVert 
+\end{align}
+    we want to find $l \in X ^{\prime} , l_n \rightarrow l \mbox{ in }X ^{\prime} $ as $n \rightarrow \infty $  \\
+    Step \uppercase\expandafter{\romannumeral 1}: Fix an $x \in X$, $(\rightarrow ) \mbox{ for } (\ref{eq3})$:\\
+    $\left\{ l_n(x) \right\}_{n \geqslant 0 }  $ is a Cauchy sequence in $\mathbb{K} $ since $\mathbb{K} $ is complete. There exists a limit $l(x)$. We can easily check that 
+    $l$ is a linear mapping. Now we know that for each $n$, $\forall x \in X, \quad \left\lvert l_n(x) \right\rvert \leqslant \left\lVert l_n \right\rVert \left\lVert x \right\rVert   $ since 
+    $\left\{ l_n \right\}_{n \geqslant 0 } $ is a Cauchy sequence, $\left\{ \left\lVert l_n \right\rVert  \right\}_{n \geqslant 0 } $ is bounded. We deduce 
+    that \[
+        \forall x \in X, \quad \left\lvert l(x) \right\rvert \leqslant \overline{\lim\limits_{n \to \infty} } \left\lVert l_n \right\rVert \left\lVert x \right\rVert  \]         \\
+Step \uppercase\expandafter{\romannumeral 2}: Use $(\ref{eq3})$, \[
+    \forall \epsilon \textgreater 0 , \exists N_{\epsilon } \mbox{ such that }\forall p,q \geqslant N_{\epsilon }, \forall x \in X, \quad \left\lvert l_p(x)-l_q(x) \right\rvert \leqslant \epsilon \left\lVert x \right\rVert
+      \]  $(\Rightarrow )$ 
+\[\forall  \epsilon \textgreater 0 , \exists N_{\epsilon } \mbox{ such that }\forall p \geqslant N_{\epsilon },\forall x \in X, \quad \left\lvert l_p(x)-l(x) \right\rvert \leqslant \epsilon \left\lVert x \right\rVert  \] This is exactly:
+\[\forall \epsilon \textgreater 0 , \exists N_{\epsilon } \mbox{ such that }\forall p \geqslant N_{\epsilon }, \quad \left\lVert l_p-l_q \right\rVert \leqslant \epsilon  \]
+so $l_n \rightarrow l$ as $n \rightarrow \infty $ in $X ^{\prime} $   
+\end{proof} 
+
+\section{\textbf{extension of bounded linear forms}}
+$\mathbb{K} =\mathbb{R} $, $X$ is a vector space, $Y \subseteq X$ is a subspace. $l:Y \mapsto \mathbb{R} $ is a linear form on $Y$.
+Define $p(x)=c_0 \left\lVert x \right\rVert $, and using Hahn-Banach Theorem to extend $l$ on $X$: $\exists L: X \mapsto \mathbb{R} $ a linear form such that 
+\begin{enumerate}
+\item $\forall y \in Y, L(y)=l(y), \mbox{i.e.} L\mid_{Y}=l$  \\ 
+\item  $\forall x \in X, \left\lvert L(x) \right\rvert \leqslant p(x) $ \\
+\item $\left\lVert L \right\rVert=\left\lVert l \right\rVert  $ 
+\end{enumerate}          
+\begin{prop}
+    Given $\left\{ x_1,\ldots,x_n \right\} $ linearly independent in $X$ and $\alpha _1,\ldots,\alpha _N \in \mathbb{R} $, $\exists L \in X ^{\prime} $ such that 
+    $L(x_j)=\alpha _j, 1 \leqslant j \leqslant N$     
+\end{prop} 
+\begin{proof}
+    $Y \triangleq \mathrm{span}\left\{ x_1,\ldots,x_n \right\}  $,$\exists z \in Y, z=\sum\limits_{j=1}^{N}\beta _{j}x_{j} $ where $\beta _{1},\ldots,\beta _{N} \in \mathbb{R} $.
+    Define $l$ on $Y$:
+    \[l \left( \sum\limits_{j=1}^{N}\beta _{j}x_{j}\right)=\sum\limits_{j=1}^{N}\beta _{j}l(x_{j})=  \sum\limits_{j=1}^{N}\beta _{j}\alpha _{j}  \]  
+\begin{claim}
+    $l$ is bounded 
+\end{claim} 
+we want to find $c_0 \textgreater 0 $ such that $\forall y \in Y, \left\lvert l(y) \right\rvert \leqslant c_{0}\left\lVert y \right\rVert  $  
+Take $z \in Y$, 
+\begin{equation*}
+\begin{split}
+   \left\lvert l(z) \right\rvert &=\left\lvert l(\sum\limits_{j=1}^{N}\beta _{j}x_{j} ) \right\rvert   \\ 
+     & =\left\lvert \sum\limits_{j=1}^{N}\beta _{j}\alpha _{j}  \right\rvert \leqslant \underset{j=1,\ldots,N}{\max  } \left\lvert \alpha _{j} \right\rvert \sum\limits_{j=1}^{N}\left\lvert \beta _{j} \right\rvert  
+\end{split}
+ \end{equation*} 
+ since $Y$ is finite dimensional, $\left\lVert z \right\rVert _{1}  \leqslant C_{1}\left\lVert z \right\rVert _{X} $  because in finite dimensional vector space, all norms are equivalent. 
+ So $\left\lvert l(z) \right\rvert \leqslant C_{0}\left\lVert z \right\rVert  $.\\
+ Now we apply Hahn-Banach Theorem: writing $p(x)=C_{0}\left\lVert x \right\rVert $, so $L$ is indeed well-defined on $X$.   
+\end{proof} 
+
+\begin{cor}
+    if $Y \subseteq X$ is a finite dimensional subspace, $\exists $ closed subspace $M$ of $X$, such that $X=Y \oplus M$     
+\end{cor} 
+\begin{proof}
+    since $Y$ is finite dimension, $Y=\mathrm{span}\left\{ x_{1},\ldots,x_{N} \right\}  $. Using the above proposition, 
+    we can define $N$ bounded linear forms $L_{j}(x_{i})=\delta _{i,j}$.\\
+    Define $M_{j}=\left\{ x \in X: L_{j}(x)=0 \right\} $ and $M=\bigcap\limits_{j=1}^{N} M_{j}$
+    \begin{claim}
+        $M$ is a closed subspace of $X$  
+    \end{claim} 
+Next take $x \in X$, we want to decompose $x$ as $\sum\limits_{j=1}^{N} application_{j}x_{j}+\mu  $ where $\alpha _{j} \in \mathbb{R} , \mu \in M$. 
+Fix $1 \leqslant k \leqslant N$, $L_{k}(x)=L_{k}(\sum\limits_{j=1}^{N}\alpha _{j}x_{j}+\mu  )=\sum\limits_{j=1}^{N}\alpha _{j}L_{k}(x_{j})=\alpha _{k} $. 
+Now we can define $\alpha _{k}\triangleq L_{k}(x)$, so $x=\sum\limits_{j=1}^{N} L_{j}(x)x_{j}+\left( x-\sum\limits_{j=1}^{N}L_{j}(x)x_{j}  \right)  $. 
+It is easy to check that $x-\sum\limits_{j=1}^{N}L_{j}(x)x_{j} \in M$. \\
+Finally, if $x \in X$, $x=\sum \alpha _{j}x_{j}+\mu =\sum \alpha _{j}^{\prime} x_{j}+\mu ^{\prime}$, can we deduce $\alpha _{j}=\alpha _{j}^{\prime} $ and $\mu =\mu ^{\prime} $?
+We study $Y \cap M$: Let $\xi \in Y \cap M$, $\exists \alpha _{1},\ldots,\alpha _{N} \in \mathbb{R} $ such that $\xi =\sum\limits_{j=1}^{N}\alpha _{j}x_{j} $. 
+$\forall 1 \leqslant k \leqslant N, \quad L_{k}(\xi )=0=L_{k}(\sum\limits_{j=1}^{N}\alpha _{j}x_{j} )=\sum\limits_{j=1}^{N}\alpha _{j}L_{k}(x_{j})=\alpha _{k} $, so $\xi =0$.                  
+
+\end{proof} 
+\begin{thm}
+    $\forall x \in X, \quad \left\lVert x \right\rVert=\underset{\left\lVert l \right\rVert=1 }{\sup }\left\lvert l(x) \right\rvert  $ 
+\end{thm} 
+\begin{proof}
+    On the one hand, fix an $x \in X$. Take $l \in X ^{\prime} $ such that $\left\lVert l \right\rVert=1 $, then $\left\lvert l(x) \right\rvert \leqslant \left\lVert l \right\rVert \left\lVert x \right\rVert   $, so $\underset{\left\lVert l \right\rVert=1 }{\sup } \left\lvert l(x) \right\rvert \leqslant \left\lVert x \right\rVert  $   \\ 
+    On the other hand, again $x \in X$ is fixed, take $Y =\mathbb{K} x$. Define $\hat{l}: Y \mapsto \mathbb{R} , \hat{l}(tx)=t \left\lVert x \right\rVert^2 $, then $\forall y \in Y, \quad \left\lvert \hat{l}(y) \right\rvert \leqslant \left\lVert y \right\rVert \left\lVert x \right\rVert   $, 
+    so $\underset{y \in Y, \left\lVert y \right\rVert \leqslant 1 }{\sup } \left\lVert \hat{l}(y) \right\rVert \leqslant \left\lVert x \right\rVert  $. Moreover, $\hat{l}(\frac{x}{\left\lVert x \right\rVert })=\left\lVert x \right\rVert $, 
+    as a consequence, $\left\lVert \hat{l} \right\rVert =\left\lVert x \right\rVert  $. 
+    Now use Hahn-Banach Theorem, $\exists l \in X ^{\prime} , l \mid _{Y}=\hat{l}$ and $\left\lVert l \right\rVert =\left\lVert \hat{l} \right\rVert  $ which is $\left\lVert x \right\rVert $. 
+    Introduce $\tilde{l}\triangleq \dfrac{l}{\left\lVert l \right\rVert }$, clearly $\tilde{l}=1$ and $\tilde{l}(x)=\frac{l(x)}{\left\lVert x \right\rVert }=l(\frac{x}{\left\lVert x \right\rVert })=\hat{l}(\frac{x}{\left\lVert x \right\rVert })=\left\lVert x \right\rVert $        
+\end{proof} 
+\begin{thm}
+    $Y \subseteq X$ is a subspace, then $\forall x \in X, \quad \underset{y \in Y}{\inf } \left\lVert x-y \right\rVert =\underset{\left\lVert l \right\rVert=1, l \mid _{Y}=0 }{\sup } \left\lvert l(x) \right\rvert  $  
+\end{thm} 
+\begin{proof}
+    On the one hand, consider $l \in X ^{\prime} $ such that $\left\lVert l \right\rVert=1 $ and $l \mid _{Y}=0$. $\forall x \in X, \forall y \in Y$, 
+    \begin{equation*}
+    \begin{split}
+       \left\lvert l(x) \right\rvert   & = \left\lvert l(x)-l(y) \right\rvert=\left\lvert l(x-y) \right\rvert   \\
+           & \leqslant \left\lVert l \right\rVert \left\lVert x-y \right\rVert   
+    \end{split}
+     \end{equation*} 
+         since $l$ is arbitrary,  $$\underset{\left\lVert l \right\rVert=1, l \mid _{Y}=0 }{\sup } \left\lvert l(x) \right\rvert \leqslant \left\lVert x-y \right\rVert  $$
+         since $y$ is arbitrary, \[
+            \underset{\left\lVert l \right\rVert=1, l \mid _{Y} }{\sup } \left\lvert l(x) \right\rvert \leqslant \underset{y \in Y}{\inf }\left\lVert x-y \right\rVert \]
+           On the other hand, assume $x \not\in Y$, define $d \triangleq \underset{y \in Y}{\inf } \left\lVert x-y \right\rVert \textgreater 0  $
+           \[Y_{0}=\left\{ \alpha x+y: y \in Y, \alpha \in \mathbb{R}  \right\} \subseteq X \]   
+           \begin{rmk}
+            if $\alpha x+y=\alpha ^{\prime} x+y ^{\prime}  \Rightarrow \alpha =\alpha ^{\prime} \mbox{ and }y=y ^{\prime} $ 
+           \end{rmk} 
+Define $l: Y \to \mathbb{R} $ linear forms such that $l(\alpha x+y)=\alpha l(x)+l(y)=\alpha l(x)$, we would like to have
+\begin{equation*}
+\begin{split}
+    \left\lvert l(\alpha x+y) \right\rvert \leqslant \left\lVert \alpha x+y \right\rVert   
+    & \Leftrightarrow \left\lvert \alpha l(x) \right\rvert \leqslant \left\lVert \alpha x+y \right\rVert \\
+    & \Leftrightarrow \left\lvert l(x) \right\rvert \leqslant \left\lVert x+y/\alpha  \right\rVert  
+\end{split}
+ \end{equation*} 
+
+  This inequality will be satisfied if $\left\lvert l(x) \right\rvert \leqslant \underset{y \in Y}{\inf } \left\lVert x-y \right\rVert=d  $.  
+Let $L(x)=d$, then $\forall y \in Y_{0}, \left\lvert l(y) \right\rvert \leqslant \left\lVert y \right\rVert  $, so $\left\lVert y \right\rVert \leqslant 1 $.\\
+Finally apply Hahn-Banach Theorem: $\exists L: X \to \mathbb{R} $ which is a bounded linear form and $\left\lVert L \right\rVert =\left\lVert l \right\rVert \leqslant 1  $, $L|_{Y_{0}} =l$, so $L|_{Y} \equiv 0$. 
+Define $\hat{L}=\frac{L}{\left\lVert L \right\rVert }$, $\left\lVert \hat{L} \right\rVert=1 $ and $\hat{L}|_{Y}=0$, $\hat{L}(x)=\frac{L(x)}{\left\lVert x \right\rVert }=\frac{L(x)}{\left\lVert l \right\rVert }=\frac{l(x)}{\left\lVert l \right\rVert }=\frac{d}{\left\lVert l \right\rVert } \geqslant d$.
+Here \[\underset{\left\lVert l \right\rVert=1, l|_{Y}=0 }{\sup } \left\lvert l(x) \right\rvert \geqslant \hat{L}(x) \geqslant d=\underset{y \in Y}{\inf } \left\lVert x-y \right\rVert  \]           
+\end{proof} 
+\begin{defi}
+    $Y \subseteq X$ a subspace, $X ^{\prime} \supseteq Y^{\perp }\triangleq \left\{ l \in X ^{\prime} : l|_{Y}=0 \right\}  $  
+\end{defi} 
+\begin{thm}
+    $l \in X ^{\prime}, \quad \left\lVert l \right\rVert _{Y}=\underset{y \in Y, \left\lVert y \right\rVert=1 }{\sup } \left\lvert l(y) \right\rvert =\underset{m \in Y^{\perp }}{\inf }\left\lVert l-m \right\rVert _{X}   $ 
+\end{thm} 
+
+\section{\textbf{application of Hahn-Banach Theorem in Optimal Control}}
+Let $X$ be a n.l.s. and $Y \subseteq X$ be a subspace. $X ^{\prime} $ be the dual space of $X$ and $Y^{\perp }\subseteq X ^{\prime} $   
+
+
+\tikzset{every picture/.style={line width=0.75pt}} %set default line width to 0.75pt        
+
+\begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1]
+%uncomment if require: \path (0,446); %set diagram left start at 0, and has height of 446
+
+%Straight Lines [id:da5405890131710203] 
+\draw    (35.87,387.43) -- (189.87,388.43) ;
+%Straight Lines [id:da8871664532309975] 
+\draw    (191.87,36.43) -- (189.87,388.43) ;
+%Shape: Free Drawing [id:dp5198533443844069] 
+\draw  [color={rgb, 255:red, 248; green, 231; blue, 28 }  ,draw opacity=1 ][line width=2.25] [line join = round][line cap = round] (29.87,404.43) .. controls (29.87,404.43) and (29.87,404.43) .. (29.87,404.43) ;
+%Shape: Free Drawing [id:dp6800117232437539] 
+\draw  [color={rgb, 255:red, 248; green, 231; blue, 28 }  ,draw opacity=1 ][line width=2.25] [line join = round][line cap = round] (54.87,387.43) .. controls (54.57,387.73) and (33.87,407.31) .. (33.87,407.43) ;
+%Shape: Free Drawing [id:dp0265557979226807] 
+\draw  [color={rgb, 255:red, 21; green, 21; blue, 17 }  ,draw opacity=1 ][line width=2.25] [line join = round][line cap = round] (46.87,395.43) .. controls (39.9,398.92) and (36,407.43) .. (26.87,407.43) ;
+%Shape: Free Drawing [id:dp6195063843894089] 
+\draw  [color={rgb, 255:red, 21; green, 21; blue, 17 }  ,draw opacity=1 ][line width=2.25] [line join = round][line cap = round] (42.87,397.43) .. controls (48.19,394.77) and (51.62,389.58) .. (56.87,386.43) ;
+%Shape: Free Drawing [id:dp5774685198249625] 
+\draw  [color={rgb, 255:red, 21; green, 21; blue, 17 }  ,draw opacity=1 ][line width=2.25] [line join = round][line cap = round] (66.87,409.43) .. controls (66.87,409.43) and (66.87,409.43) .. (66.87,409.43) ;
+%Shape: Free Drawing [id:dp992084138434145] 
+\draw  [color={rgb, 255:red, 21; green, 21; blue, 17 }  ,draw opacity=1 ][line width=2.25] [line join = round][line cap = round] (76.87,389.43) .. controls (66.93,397.16) and (54.56,404.74) .. (45.87,413.43) ;
+%Shape: Free Drawing [id:dp9722792612351436] 
+\draw  [color={rgb, 255:red, 21; green, 21; blue, 17 }  ,draw opacity=1 ][line width=2.25] [line join = round][line cap = round] (105.87,390.43) .. controls (102.74,394.82) and (90.66,412.43) .. (86.87,412.43) ;
+%Shape: Free Drawing [id:dp2650072904251952] 
+\draw  [color={rgb, 255:red, 21; green, 21; blue, 17 }  ,draw opacity=1 ][line width=2.25] [line join = round][line cap = round] (129.87,390.43) .. controls (124.62,400.92) and (118.18,413.28) .. (107.87,418.43) ;
+%Shape: Free Drawing [id:dp44526502992893113] 
+\draw  [color={rgb, 255:red, 21; green, 21; blue, 17 }  ,draw opacity=1 ][line width=2.25] [line join = round][line cap = round] (163.87,390.43) .. controls (160.04,397.33) and (154.66,411.04) .. (147.87,414.43) ;
+%Shape: Free Drawing [id:dp6107313253225846] 
+\draw  [color={rgb, 255:red, 21; green, 21; blue, 17 }  ,draw opacity=1 ][line width=2.25] [line join = round][line cap = round] (182.87,393.43) .. controls (182.38,394.17) and (165.87,415.49) .. (165.87,418.43) ;
+%Shape: Free Drawing [id:dp2035490096309298] 
+\draw  [color={rgb, 255:red, 21; green, 21; blue, 17 }  ,draw opacity=1 ][line width=2.25] [line join = round][line cap = round] (62.87,311.43) .. controls (62.87,329.9) and (62.75,348.94) .. (61.87,367.43) .. controls (61.75,369.91) and (54.9,382.43) .. (59.87,382.43) ;
+%Shape: Free Drawing [id:dp3432363269915528] 
+\draw  [color={rgb, 255:red, 21; green, 21; blue, 17 }  ,draw opacity=1 ][line width=2.25] [line join = round][line cap = round] (65.87,309.43) .. controls (80.53,305.77) and (106.53,298.92) .. (113.87,308.43) .. controls (125.48,323.47) and (113.53,346.44) .. (113.87,365.43) .. controls (113.95,370.44) and (114.87,375.42) .. (114.87,380.43) ;
+%Shape: Free Drawing [id:dp8303697962959462] 
+\draw  [color={rgb, 255:red, 21; green, 21; blue, 17 }  ,draw opacity=1 ][line width=2.25] [line join = round][line cap = round] (84.87,313.43) .. controls (81.74,324.37) and (58.87,349.22) .. (58.87,353.43) ;
+%Shape: Free Drawing [id:dp40129386166194636] 
+\draw  [color={rgb, 255:red, 21; green, 21; blue, 17 }  ,draw opacity=1 ][line width=2.25] [line join = round][line cap = round] (88.87,357.43) .. controls (81.35,364.59) and (67.87,370.05) .. (67.87,380.43) ;
+%Shape: Free Drawing [id:dp4309722019757207] 
+\draw  [color={rgb, 255:red, 21; green, 21; blue, 17 }  ,draw opacity=1 ][line width=2.25] [line join = round][line cap = round] (103.87,338.43) .. controls (88.05,350.3) and (75.55,368.21) .. (62.87,383.43) ;
+%Shape: Free Drawing [id:dp564048361285111] 
+\draw  [color={rgb, 255:red, 21; green, 21; blue, 17 }  ,draw opacity=1 ][line width=2.25] [line join = round][line cap = round] (107.87,362.43) .. controls (100.87,369.77) and (94.04,377.26) .. (86.87,384.43) .. controls (84.79,386.51) and (80.87,390.55) .. (80.87,390.43) ;
+%Shape: Free Drawing [id:dp5208213903929053] 
+\draw  [color={rgb, 255:red, 21; green, 21; blue, 17 }  ,draw opacity=1 ][line width=2.25] [line join = round][line cap = round] (103.87,312.43) .. controls (95.5,327.07) and (83.22,338.14) .. (71.87,350.43) .. controls (68.85,353.7) and (62.91,357.34) .. (60.87,361.43) ;
+%Shape: Free Drawing [id:dp6137194075514032] 
+\draw  [color={rgb, 255:red, 21; green, 21; blue, 17 }  ,draw opacity=1 ][line width=2.25] [line join = round][line cap = round] (87.87,213.43) .. controls (87.87,235.07) and (86.87,253.55) .. (86.87,277.43) ;
+%Shape: Free Drawing [id:dp7061946003252382] 
+\draw  [color={rgb, 255:red, 21; green, 21; blue, 17 }  ,draw opacity=1 ][line width=2.25] [line join = round][line cap = round] (89.87,291.43) .. controls (93.85,283.46) and (99.87,274.17) .. (99.87,265.43) ;
+%Shape: Free Drawing [id:dp40512243583283736] 
+\draw  [color={rgb, 255:red, 21; green, 21; blue, 17 }  ,draw opacity=1 ][line width=2.25] [line join = round][line cap = round] (71.87,268.43) .. controls (73.02,268.43) and (76.34,272.74) .. (76.87,273.43) .. controls (81.53,279.53) and (84.77,286.7) .. (89.87,292.43) .. controls (92.22,295.08) and (96.01,297) .. (96.87,300.43) .. controls (97.05,301.16) and (95.2,300.1) .. (94.87,299.43) .. controls (94.33,298.36) and (92.87,295.58) .. (92.87,294.43) ;
+
+
+% Text Node
+\draw (64,190) node [anchor=north west][inner sep=0.75pt]   [align=left] {rocket};
+
+
+\end{tikzpicture}
+
+\begin{question}
+    $H \textgreater 0 $ is the targeted height, and the motion is $1-$D moves alone the vertical axis. Let $x(t)$ be the position of the rocket at time $t \geqslant 0 $ with initial values $x(0)=0, \dot{x}(0)=0$     
+\end{question} 
+We denote by $M$ the mass of the rocket, then by \textbf{New's Law}: \[
+    M \ddot{x}(t)=-Mg+F(t) \] where $F$ is the applied force by engines. We want to send the rocket at a height $H$ at time $T \textgreater 0 $, so we need to find $F$ such that \[
+        \mathcal{C}(T)=\int_{0}^{T} \left\lvert F(s) \right\rvert \mathrm{d}s  \]    is minimal.\\
+        We are interested in the value and minimizer of $\inf \left\{ \mathcal{C}^{F}(T): F is \mbox{ such that }x^{F}(T)=H \right\}$.\\
+        Assume $M=1$, then $\dot{x}(t)-\dot{x}(0)=\int_{0}^{t} \left( -g+F(s) \right) \mathrm{d}s  $, 
+        so $\dot{x}(t)=-gt+\int_{0}^{t} F(s) \mathrm{d}s $
+        Again, \[x(t)-x(0)=-g \frac{t^2}{2}+\int_{0}^{t} \int_{0}^{s} F(r)\mathrm{d}r \mathrm{d}s \]
+        \[\int_{0}^{t} \int_{0}^{s} F(r)\mathrm{d}r \mathrm{d}s =\int_{0}^{t}\int_{0}^{t} \mathcal{X}_{\{r \leqslant s\}}F(r)\mathrm{d}s \mathrm{d}r =\int_{0}^{t} (t-r)F(r) \mathrm{d}r     \]
+\[x(t)=-g \frac{t^2}{2}+\int_{0}^{t}(t-r)F(r)\mathrm{d}r \]
+We are interested in $F$ such that $x(T)=H \Leftrightarrow \int_{0}^{T} (T-r)F(r) \mathrm{d}r=g \frac{T^2}{2}+H $. We are interested in $\inf \left\{ \mathcal{C}^{F}(T): F \mbox{ satisfies } \int_{0}^{T} (T-r)F(r)\mathrm{d}r=g \frac{T^2}{2}+H  \right\} $. 
+At the moment $T$ is fixed, later we minimize over $T$.
+\begin{rmk}
+    $\forall g \in \mathcal{C}\left[ 0,T \right], \int_{0}^{T} g(s)\mathrm{d}\mu (S)=\int_{0}^{T} g(s)F(s)\mathrm{d}s, \mu (\mathrm{d}s )=F(s)\mathrm{d}s   $, then $F$ is called the density 
+    of $\mu $ w.r.t. the Lebesgue measure, then $\int_{0}^{T} \left\lvert F(s) \right\rvert \mathrm{d}s=\left\lVert \mu  \right\rVert _{TV}  $. 
+    Now if $\mu $ is a general measure, $\left\lVert \mu  \right\rVert _{TV}=\triangleq \underset{\Pi \mbox{partation of }\left[ 0,T \right] }{\sup } \sum\limits_{A \in \Pi } \left\lvert \mu (A) \right\rvert  $, 
+    recall that a partation of $\left[ 0,T \right] $ is a countable number of measurable subsets of $\left[ 0,T \right] $ and these subsets are pairwise disjoint, and their union is $\left[ 0,T \right] $. 
+\end{rmk}
+    Now we can reformulate the problem as \[
+        \underset{\mu \in \mathcal{C}\left[ 0,T \right]^{\prime}  }{\inf }\left\{ \left\lVert \mu  \right\rVert _{TV} : \mu (\omega)=H+g \frac{T^2}{2} \right\} \mbox{ where }\mu (\omega )
+        =\int_{0}^{T} \omega (s)\mathrm{d}\mu (s)=\int_{0}^{T} (T-s)\mathrm{d}\mu (s)   \]         
+        \begin{claim}
+            the $\inf $ is $\frac{H}{T}+\frac{gT}{2}$ and the minimizer is $\mu ^{*}=\left( \frac{H}{T}+\frac{gT}{2} \right)\delta _{0} $   
+        \end{claim} 
+Define $Y \triangleq \mathrm{span}(\omega ) \subseteq \mathcal{C}\left[ 0,T \right]  $ where $\omega (t)=T-t$, we also define $\hat{l}_{0}: Y \to \mathbb{R} $ with $\hat{l}_{0}(\omega )=H+g\frac{T^2}{2}$. 
+$\hat{l}_{0}$ is a bounded linear form on $Y$, so $\hat{l}_{0} \in Y$. We can apply Hahn-Banach Theorem to extend $\hat{l}_{0}$ to $l_{0} \in \mathcal{C}\left[ 0,T \right]^{\prime}  $. 
+$\forall z \in Y, l_{0}(z)=\hat{l}_{0}(z)$. Now we reformulate the constraint $\mu (\omega )=H+g \frac{T^2}{2} \Leftrightarrow \mu (\omega )=l_{0}(\omega ) \Leftrightarrow (\mu -l_{0})(\omega )=0$. 
+We can reformulate the problem as 
+\begin{align*}
+    &\underset{\mu \in \mathcal{C}\left[ 0,T \right]^{\prime}  }{\inf }
+    \left\{ \left\lVert l_{0}-\mu -l_{0} \right\rVert _{TV}: (\mu -l_{0})(\omega )=0  \right\} \\ 
+   &\Leftrightarrow \underset{\hat{\mu }\in \mathcal{C}\left[ 0,T \right]^{\prime}  }{\inf } \left\{ \left\lVert \hat{\mu }-l_{0} \right\rVert _{TV}: \hat{\mu }(\omega )=0 \mbox{ where }\hat{\mu }\triangleq l_{0}-\mu \in Y^{\perp }\right\} \\
+    &= \underset{y \in Y, \left\lVert y \right\rVert \leqslant 1 }{\sup } \left\lvert l_{0}(y) \right\rvert =\underset{\alpha \in \mathbb{R} , \left\lVert \alpha \omega  \right\rVert _{\infty }\leqslant 1}{\sup } \left\lvert \alpha (H+g \frac{T^2}
+   {2}) \right\rvert \\  
+    &\left( \mbox{ where } \left\lVert \omega  \right\rVert _{\infty }=\underset{0 \leqslant t \leqslant T}{\max }\left\lvert \omega (t) \right\rvert =T \right) \\
+    &=\left( \underset{\alpha \in \mathbb{R} , \left\lvert \alpha  \right\rvert \leqslant \frac{1}{T}}{\sup }\left\lvert \alpha  \right\rvert  \right)\left( H+g \frac{T^2}{2} \right)\\ 
+    & =H+g \frac{T}{2} 
+\end{align*}       
+ 
+Now what about the minimizer? if $\mu ^{*}$ is a minimizer with $\left\lVert \mu ^{*} \right\rVert =\frac{H}{T}+g \frac{T}{2} $, we know the properties of the minimizer which come from the constraint in the minimizer problem that 
+\begin{align*}
+\mu ^{*}(\omega )=H+\frac{T^2 g}{2}=T \left( \frac{H}{T}+g \frac{T}{2} \right)=\left\lVert \omega  \right\rVert _{\infty }\left\lVert \mu ^{*} \right\rVert _{TV} \\
+\left( \mbox{ where }\omega (t)=T-t \right) \\
+ \Rightarrow \mu ^{*}=\beta \delta _{0} \mbox{ where }\beta = \frac{H}{T}+\frac{Tg}{2}
+\end{align*} 
+Last step is to minimize over $T$: 
+$f(T)\triangleq \frac{H}{T}+\frac{Tg}{2}$, 
+then what is $T^{*} \textgreater 0 $ such that 
+$f ^{\prime} (T^{*})=0$. 
+The answer is $T^{*}=\sqrt{\frac{2H}{g}}$ and $f(T^{*})=\sqrt{2gH}$ 
+
+\section{\textbf{Reflexive Spaces}}
+$X$ n.l.s. and $X ^{\prime} $ the dual space of $X$.
+\[\left\lVert l \right\rVert \triangleq \underset{\left\lVert x \right\rVert=1 }{\sup }\left\lvert l(x) \right\rvert =\underset{\left\lVert x \right\rVert \leqslant 1 }{\sup }\left\lvert l(x) \right\rvert  \]   
+for the second equality, $(\leqslant )$ is obvious, we have to check $(\geqslant )$: let $x \in X$ be arbitrary nonzero element, $l(\frac{x}{\left\lVert x \right\rVert } )\leqslant \underset{\left\lVert \bar{x} \right\rVert =1}{\sup } l(\bar{x})=\left\lVert l \right\rVert $, 
+so $l(x) \leqslant \left\lVert l \right\rVert \left\lVert x \right\rVert  $, which is $\underset{\left\lVert x \right\rVert \leqslant 1}{\sup } \left\lvert l(x) \right\rvert \leqslant \left\lVert l \right\rVert $  \\
+Now $X ^{\prime \prime} = \mbox{ set of bounded linear forms on }X ^{\prime} $, and $\left\lVert L \right\rVert =\underset{\left\lVert l \right\rVert =1}{\sup } \left\lvert L(l) \right\rvert =\underset{\left\lVert l \right\rVert \leqslant 1}{\sup } \left\lvert L(l) \right\rvert $    \\
+Let $x \in X$, and $L_{x}: X ^{\prime} \to \mathbb{R} $ such that $l \mapsto l(x)$.
+\begin{claim}
+    $L_{x}\in X ^{\prime \prime} $ 
+\end{claim}    
+\begin{proof}
+    It is easy to see $L_{x}$ is linear. $\underset{\left\lVert l \right\rVert =1}{\sup } \left\lvert L_{x}(l) \right\rvert =\underset{\left\lVert l \right\rVert =1}{\sup }l(x)=\left\lVert x \right\rVert $  
+\end{proof} 
+So we have a mapping: $\mathcal{L}: X \to X ^{\prime \prime} $ such that $x \mapsto L_{x}$, and $\left\lVert \mathcal{L}_{x} \right\rVert =\left\lVert L_{x} \right\rVert =\left\lVert x \right\rVert  $. $\mathcal{L}$ is an isometry, so $\mathcal{L} \subseteq X ^{\prime \prime} $ 
+\begin{question}
+    Can we find an element $M$ of $X ^{\prime \prime} $ such that $M \not\in \mathcal{L}(x)$   
+\end{question}     
+\begin{defi}[reflexive sapce]
+    we say that $X$ is  reflexive under the condition $\mathcal{L}(X)=X ^{\prime \prime} $ 
+\end{defi} 
+\begin{eg}
+    \begin{enumerate}
+    \item  if $X$ is finite dimension, $X$ is reflexive\\ 
+    \item  $X=\mathcal{C}\left[ -1,1 \right] $ with $\left\lVert  \right\rVert _{\infty }$, then this is a counterexample.  
+    \end{enumerate} 
+      
+\end{eg} 
+\begin{proof}
+    we know that 
+    \begin{align}\label{eq4}
+    \forall l \in X ^{\prime} , \quad \left\lVert l \right\rVert =\underset{\left\lVert L \right\rVert =1}{\sup }\left\lvert L(l) \right\rvert =L_{0}(l) \mbox{ for some }L_{0}\in X ^{\prime \prime} \mbox{ where } \left\lVert L_{0} \right\rVert =1   
+     \end{align} 
+Suppose $X=X ^{\prime \prime} $, then 
+\begin{align}\label{eq5}
+\forall L \in \mathcal{C}\left[ -1,1 \right]^{\prime \prime} , \exists x_{L}\in \mathcal{C}\left[ -1,1 \right], \forall l \in \mathcal{C}\left[ -1,1 \right]^{\prime} , \quad L(l)=l(x_{L})   
+ \end{align}  
+Next step, put $(\ref{eq5})$ in $\ref{eq4}$: we apply $(\ref{eq5})$ to $L_{0}$:
+\begin{align}\label{eq6}
+\exists x_{0}\in \mathcal{C}\left[ -1,1 \right], \forall l \in \mathcal{C}\left[ -1,1 \right]^{\prime} , \left\lVert l \right\rVert=L_{0}(l)=l(x_0)   
+ \end{align} 
+Because $\mathcal{L}: X \to X ^{\prime \prime} $ is an isometry, $\left\lVert L_{0} \right\rVert =\left\lVert x \right\rVert =1$. 
+Define $l \in \mathcal{C}\left[ -1,1 \right]^{\prime}  $ as follows: 
+\begin{align*}
+\forall g \in \mathcal{C}\left[ -1,1 \right], \quad l(g)\triangleq \int_{-1}^{0} g(t)\mathrm{d}t-\int_{0}^{1}g(t) \mathrm{d}t   
+ \end{align*}    
+\begin{claim}
+    $\left\lVert l \right\rVert=2 $
+\end{claim} 
+\begin{align*}
+\left\lvert l(g) \right\rvert &\leqslant \left\lvert \int_{-1}^{0} g(t)\mathrm{d}t \right\rvert+\left\lvert \int_{0}^{1} g(t)\mathrm{d}t \right\rvert \\ 
+& \leqslant \int_{-1}^{0} \left\lvert g(t) \right\rvert \mathrm{d}t+\int_{0}^{1} \left\lvert g(t) \right\rvert \mathrm{d}t \\ 
+& \leqslant 2 \left\lVert g \right\rVert _{\infty }     
+ \end{align*} 
+so $\left\lVert l \right\rVert \leqslant 2$. Now introduce $g_{\epsilon }(t)\triangleq \mathcal{X}_{[-1,-\epsilon )}(t)-\mathcal{X}_{(\epsilon ,1]}(t)+\frac{t}{\epsilon }\mathcal{X}_{\left[ -\epsilon ,\epsilon  \right] }(t) $, 
+then $l(g_{\epsilon })=2(1-\epsilon )$ and $\left\lVert g_{\epsilon } \right\rVert =1 $. 
+\begin{align*}
+\left\lVert l \right\rVert =\underset{\left\lVert g \right\rVert =1 }{\sup } \left\lvert l(g) \right\rvert \geqslant \left\lvert l(g_{\epsilon }) \right\rvert =2(1-\epsilon )   
+ \end{align*}   
+so $\left\lVert l \right\rVert =2 $. Now can we find a function $x \in \mathcal{C}\left[ -1,1 \right] $ such that $l(x)=2$ and $\left\lVert x \right\rVert =1 $? 
+In fact, $\forall y \in \mathcal{C}\left[ -1,1 \right] $, if $\left\lVert y \right\rVert \leqslant 1 $, then $\left\lvert l(y) \right\rvert \textless 2$, here $2$ is not reached by $l$. 
+$\forall y \in \mathcal{C}\left[ -1,1 \right], l(y)\neq \left\lVert l \right\rVert  $, this contradicts the  function in $(\ref{eq6})$. As a consequence, $\mathcal{C}\left[ -1,1 \right] $ is not reflexive.  
+
+\end{proof} 
+
+\begin{thm}
+ Let $X$ be a n.l.s., $\mathbb{K} =\mathbb{R} $. Assume $X ^{\prime} $ is separable and $D=\left\{ l_n: n \geqslant 1 \right\}\subseteq X ^{\prime}  $ is a countable and dense subset, then $X$ is separable.      
+\end{thm} 
+\begin{proof}
+    Since $X ^{\prime} $ is separable. For each $n \in \mathbb{N} $, $\left\lVert l_n \right\rVert =\underset{\left\lVert z \right\rVert =1}{\sup }\left\lvert l_n(z) \right\rvert  $. 
+    $\exists z_n \in X$ such that $\left\lVert z_n \right\rVert =1$ and $\left\lvert l_n(z_n) \right\rvert \geqslant \frac{1}{2}\left\lVert l_n \right\rVert   $.\\
+    \begin{rmk}
+        we can replace $\left\lvert l_n(z_n) \right\rvert $ by $l_n(z_n)$, since we can use $\hat{z_n}=\pm z_n$  
+    \end{rmk}   
+    we work on $\left\{ z_n: n \in \mathbb{N}  \right\} $:
+    \begin{claim}
+        $\overline{\mathrm{span}\left\{ z_n: n \in \mathbb{N}  \right\}  }=X$
+    \end{claim}  
+    Define $Y \triangleq \overline{\mathrm{span}\left\{ z_n: n \in \mathbb{N}  \right\} } $ and assume $Y \neq X$, then $\exists x \in X, x \not\in Y$. 
+    Define $Z_{x}\triangleq \left\{ \alpha x+y: \alpha \in \mathbb{R} ,y \in Y \right\} $, we then construct $l: Z_{x} \to \mathbb{R} $ such that $l(x)\neq 0$ and $l|_{Y}=0$. 
+    Now use Hahn-Banach Theorem: $\exists \hat{l}: X \to \mathbb{R} $ a bounded linear form on $X$ and $\left\lVert \hat{l} \right\rVert =\left\lVert l \right\rVert  $, 
+    $\forall z \in Z_{x}, \hat{l}(z)=l(z)$, in particular, $\hat{l}(x)\neq 0$ and $\hat{l}|_{Y}=0$. 
+    $\forall n \in \mathbb{N} , \hat{l}(z_n)=0$, we can, up to normalization, assume $\left\lVert \hat{l} \right\rVert =1$.
+    Next we use that $D$ is dense: $\forall  \epsilon \textgreater 0 ,\exists n$ such that $\left\lVert l_n-\hat{l} \right\rVert \leqslant \epsilon  $
+    \begin{align*}
+    \left\lVert l_n \right\rVert &=\left\lVert \hat{l}+l_n-\hat{l} \right\rVert \\
+    & \geqslant \left\lVert \hat{l} \right\rVert -\left\lVert l_n-\hat{l} \right\rVert \geqslant 1-\epsilon    
+     \end{align*}  and
+\begin{align*}
+\left\lVert l_n \right\rVert &\leqslant 2l_n(z_n) =2 \left( l_n(z_n)-\hat{l}(z_n) \right) \\
+&2 \left\lVert l_n-\hat{l} \right\rVert \left\lVert z_n \right\rVert \geqslant 2 \epsilon    
+ \end{align*} 
+which is impossible. So we obtained that $\overline{\mathrm{span}\left\{ z_n: n \in \mathbb{N}  \right\} } =X $.
+\begin{align*}
+X&=\overline{\mathrm{span}\left\{ \sum\limits_{j=1}^{M}\alpha _{j}z_{n_{j}}: M \geqslant 1, \alpha _{1},\ldots,\alpha _{M} \in \mathbb{R}   \right\} }\\
+&=\overline{\mathrm{span}\left\{ \sum\limits_{j=1}^{M}\alpha _{j}z_{n_{j}} : M \geqslant 1, \alpha _{1},\ldots,\alpha _{M} \in \mathbb{Q}  \right\} } 
+ \end{align*}  
+the last set under the overline is countable. As a consequence, $X$ is separable. 
+
+\end{proof} 
+\begin{ex}
+    Show that $\mathcal{C}\left[ -1,1 \right]$ is not reflexive.
+\end{ex} 
+\begin{so}
+    Suppose $\mathcal{C}\left[ -1,1 \right]=\mathcal{C}\left[ -1,1 \right]^{\prime \prime}   $, we know that $\mathcal{C}\left[ -1,1 \right]$ is separable, so $\mathcal{C}\left[ -1,1 \right]^{\prime \prime}  $ is separable.
+    Using the above theorem, we know that $\mathcal{C}\left[ -1,1 \right]^{\prime}  $ is separable, which is not true and is checked as follows:
+    We can define a family $\left\{ l_{t} \right\}_{t \in \left[ -1,1 \right] } $ which is not countable, such that $\forall t \neq t ^{\prime} , \quad \left\lVert l_{t}-l_{t ^{\prime} } \right\rVert =2$.
+    Then $\forall t \neq t ^{\prime} , B(l_t,\frac{1}{2} )\cap B(l_{t ^{\prime} },\frac{1}{2} )=\varnothing $. If $D \subseteq \mathcal{C}\left[ -1,1 \right]^{\prime}  $ is dense, then $\forall t, D \cap B(l_t,\frac{1}{2} )\neq \varnothing $.
+    Then $D$ cannot be countable.      
+\end{so}
+    \section{\textbf{Hilbert Space}}
+$X$ linear space, $\mathbb{K} =\mathbb{R} $, a mapping $\left\langle , \right\rangle : X \times X \to \mathbb{K} $ is called a inner product if $\forall x,y,z \in X, \alpha \in \mathbb{K}$:
+\begin{enumerate}
+\item $\left\langle \alpha x+y, z\right\rangle =\alpha \left\langle x,z \right\rangle +\left\langle y,z \right\rangle $  \\ 
+\item $\left\langle x,y \right\rangle =\overline{\left\langle y, x\right\rangle }$\\ 
+\item $\left\langle x,x \right\rangle \geqslant 0$ and $\left\langle x,x \right\rangle =0 \iff x=0 $  
+\end{enumerate}     
+\begin{defi}
+    $\left\lVert x \right\rVert \triangleq \sqrt{\left\langle x, x\right\rangle  }$ 
+\end{defi} 
+\begin{thm}[Schwarz Inequality]
+    $\forall x,y \in X, \quad \left\lvert \left\langle x,y \right\rangle  \right\rvert \leqslant \left\lVert x \right\rVert \left\lVert y \right\rVert $  
+\end{thm} 
+\begin{rmk}
+    \begin{enumerate}
+    \item $\left\lvert \left\langle x,y \right\rangle  \right\rvert =\left\lVert x \right\rVert \left\lVert y \right\rVert \iff \exists \alpha \in \mathbb{K} , x=\alpha y  $ \\ 
+    \item  $\left\lVert x \right\rVert =\underset{y \in X, \left\lVert y \right\rVert =1}{\sup }\left\lvert \left\langle x, y\right\rangle  \right\rvert  $ \\
+    On the one hand, $\forall y \in X$ such that $\left\lVert y \right\rVert =1, \quad  \left\lvert \left\langle x,y \right\rangle  \right\rvert \leqslant \left\lVert x \right\rVert   \Rightarrow \underset{y \in X, \left\lVert y \right\rVert=1 }{\sup } \left\lvert \left\langle x,y \right\rangle  \right\rvert \leqslant \left\lVert x \right\rVert $.
+    On the other hand, $\left\lVert x \right\rVert =\left\lvert x,y^{*} \right\rvert  $ for a specific $y^{*}$. Take $y^{*}=\frac{x}{\left\lVert x \right\rVert } $, then 
+    $\left\lvert \left\langle x,y^{*} \right\rangle  \right\rvert =\left\lvert \left\langle x,\frac{x}{\left\lVert x \right\rVert }  \right\rangle  \right\rvert =\frac{1}{\left\lVert x \right\rVert } \left\lvert \left\langle x,x \right\rangle  \right\rvert   =\left\lVert x \right\rVert $    
+
+\end{enumerate} 
+\end{rmk} 
+\begin{thm}
+    $\forall x,y \in X, \left\lVert x+y \right\rVert \leqslant \left\lVert x \right\rVert  +\left\lVert y \right\rVert  $ 
+\end{thm} 
+\begin{thm}[parallelogram identity]
+    $\left\lVert x+y \right\rVert ^2+\left\lVert x-y \right\rVert^2=2 \left( \left\lVert x \right\rVert ^2+\left\lVert y \right\rVert ^2   \right)  $ 
+\end{thm} \begin{defi}[orthogonality]
+    We say that $x,y \in X$ are orthogonal if $\left\langle x,y \right\rangle =0 $  
+\end{defi} 
+\begin{defi}[Hilbert space]
+    $X$ is a Hilbert sapce if $X$ is a linear space which is complete w.r.t. the norm induced by the inner product 
+\end{defi} 
+\begin{rmk}
+    \begin{enumerate}
+    \item $\left\{ x_n \right\}_{n \geqslant 0 } , \left\lVert x_n-x \right\rVert \rightarrow 0 $ as $n \rightarrow \infty $ , then $\forall y \in X, \quad \left\langle x_n,y \right\rangle \rightarrow \left\langle x,y \right\rangle  $  as $n \rightarrow \infty $  \\ 
+    \item $X, \left\langle , \right\rangle$. Assume $X$ is not complete with the norm induced by the inner product. We can construct the completion $\bar{X}$ of $X$ as the set of limits of converging sequences in $X$
+     and define $\left\langle \left\langle x,y \right\rangle  \right\rangle \triangleq \lim\limits_{n \to \infty}\left\langle x_n,y_n \right\rangle   $ if $X\ni x_n \rightarrow x \in \bar{X}$ and $X \ni y_n \rightarrow y \in \bar{X}$       
+    \end{enumerate} 
+\end{rmk} 
+\begin{eg}
+    \begin{enumerate}
+    \item $X=\mathcal{C}\left[ a,b \right] $ with $\left\langle f,g \right\rangle =\int_{a}^{b} f(x)g(x) \mathrm{d}x $  is not complete\\ 
+    \item  $\ell ^2=\left\{ \left\{ a_j \right\}_{j \geqslant 1}: a_{j} \in \mathbb{C} , \sum\limits_{j \geqslant 1} \left\lvert a_{j} \right\rvert^2 \textless\infty    \right\} $ and $\left\langle a,b \right\rangle =\sum\limits_{j=1}^{\infty } a_{j} \overline{b_{j}} $ is complete \\ 
+    \item $D \subseteq \mathbb{R} ^2, \left\langle f,g \right\rangle =\int_{D} f(x)g(x) \mathrm{d}x  $ and $L^2(D)=\left\{ f: D \to \mathbb{R} : \int_{D} \left\lvert f(x) \right\rvert^{2}\mathrm{d}x \textless\infty    \right\} $  
+    with the relation $f=\tilde{f}$ if $f=\tilde{f} \mathrm{a.e.} $, this space is complete. And when $D=\left( a,b \right) $, \romannumeral 3 )  is the completion of \romannumeral 1).     
+    \end{enumerate} 
+\end{eg} 
+\section{\textbf{Riesz Representation THeorem}}
+A little observation: $x \in X$ and if we define $l_{x}: X \to \mathbb{K} $ such that $y \mapsto \left\langle y,x \right\rangle $, it is readily checked that $l_{x} \in X ^{\prime} $ and $\left\lVert l_{x} \right\rVert =\left\lVert x \right\rVert  $  
+\begin{thm}[riesz representation theorem]
+    If $X$ is a Hilbert space and $l \in X ^{\prime}  $, then $\exists x_{l} \in X$ such that $\forall y \in X, \quad l(y)=\left\langle y, x_{l}\right\rangle $     
+\end{thm} 
+\begin{proof}
+    The Uniqueness of $x_{l}$ is clear, since $\left\langle y,z \right\rangle =0 $ for all $y \in X$ implies $z=0$. To  prove its existence, consider the null space $N=N(l)=\left\{ y \in X: l(y)=0 \right\} $. 
+    Since $l$ is continuous and linear, $N$ is a closed linear subspace. The theorem is trivial in the case $N=X$; we take  in this case $x_{l}=0$. Suppose $N \neq X$. Then there exists a $x_{0}$ whhich belongs to $N^{\perp }$.
+    Define \begin{align*}
+    x_{l}=\left( \bar{l(x_{0})}/\left\lVert x_{0} \right\rVert^2  \right)x_{0} 
+     \end{align*}     
+     We will show that this $x_{l}$ meets the condition of the Theorem. First, if $y \in N$, then $l(y)=\left\langle y,x_{l} \right\rangle $ since both sides vanish. Next, if $y$ is of the form $y=\alpha x_{0}$, then we have
+     \begin{align*}
+     \left\langle y,x_{l} \right\rangle =\left\langle \alpha x_{0},x_{l} \right\rangle =\left\langle \alpha x_{0},\frac{\bar{l(x_{0})}}{\left\lVert x_{0} \right\rVert^2 }x_{0}  \right\rangle =\alpha l(x_0)=f(\alpha x_{0}) =l(y)
+      \end{align*}     
+Since $f(x)$ and $\left\langle y,x_{l} \right\rangle $ are both linear in $y$, the equality $l(y)=\left\langle y,x_{l} \right\rangle , y \in X$, is proved if we have proved that $X$ is spanned by $N$ and $x_{0}$. 
+To show the last assertion, we write, remembering that $l(x_{l}) \neq 0$,
+\begin{align*}
+y=\left( y-\frac{l(y)}{l(x_{l})}x_{l}  \right)+\frac{l(y)}{l(x_{l})} x_{l} 
+ \end{align*}        
+Since the first term is an element of $N$, we have thus proved the representation $l(y)=\left\langle y,x_{l} \right\rangle $.\\
+Therefore, we have 
+\begin{align*}
+\left\lVert f \right\rVert=\underset{\left\lVert y \right\rVert \leqslant 1 }{\sup } \left\lvert l(y) \right\rvert  =\underset{\left\lVert y \right\rVert \leqslant 1 }{\sup }\left\lvert \left\langle y,x_{l} \right\rangle  \right\rvert \leqslant 
+\underset{\left\lVert y \right\rVert \leqslant 1 }{\sup } \left\lVert y \right\rVert \left\lVert x_{l} \right\rVert =\left\lVert x_{l} \right\rVert   
+ \end{align*} 
+and also $\left\lVert \l \right\rVert=\underset{\left\lVert y \right\rVert \leqslant 1 }{\sup }\left\lvert l(y) \right\rvert \geqslant \left\lvert l(x_{l}/\left\lVert x_l \right\rVert ) \right\rvert =\left\langle \frac{x_{l}}{\left\lVert x_{l} \right\rVert } ,x_{l} \right\rangle   =\left\lVert x_{l} \right\rVert $.
+Hence we have proved the equality $\left\lVert l \right\rVert=\left\lVert x_{l} \right\rVert  $  
+
+\end{proof} 
+
+\section{\textbf{Lax-Milgram Theorem}}
+\begin{thm}[Lax-Milgram Theorem]
+    If $X$ is a Hilbert space and $B: X \times X \to \mathbb{K} $ is such that 
+    \begin{enumerate}
+    \item (sesqui-linearity): $\forall x \in X, \quad B$ is linear in the first component and skew-linear in the second component  \\ 
+    \item (boundedness): $c_{1} \textgreater 0 , \forall x,y \in X, \quad \left\lvert B(x,y) \right\rvert \leqslant c_{1} \left\lVert x \right\rVert \left\lVert y \right\rVert  $ \\
+    \item (positivity): $c_{0} \textgreater 0 , \forall x \in X, \quad \left\lvert B(x,x) \right\rvert \geqslant c_{0}\left\lVert x \right\rVert^2  $ 
+\end{enumerate}   
+then $\forall l \in X ^{\prime} , \exists x_{l} \in X$ such that $\forall y \in X, l(y)=B(y,x)$  
+\end{thm} 
+CLearly, this theorem is a stronger version and a generalization of Riesz Representation. 
+\subsection{\textbf{variational Problems}}
+$D \sqsubseteq \mathbb{R} ^N$ is open and connected, $f: D \to R \in \mathcal{C}(D)$ and $g: \partial D \to \mathbb{R} \in \mathcal{C}(\partial D)$.
+We now consider the Poisson equation: $u \in \mathcal{C}^2(D)\cap \mathcal{C}(\bar{D})$ \\
+\begin{align*}
+\begin{cases}
+- \nabla ^2 u=f \mbox{ in }D \\ 
+ u=g \mbox{ on }\partial D
+\end{cases}     
+\end{align*}
+we want to solve this type of equation using appropriate Hilbert space:
+\begin{thm}
+    If $a: X \times X \to \mathbb{R} $ is sesqui-linear, bounded, and positive, $b \in X ^{\prime} $, then $\exists ! x \in X$ such that
+    \begin{align*}
+    \underset{x \in X}{\inf } \left\{ \frac{1}{2} a(x,x)-b(x)  \right\} =\frac{1}{2}a(x^{*},x^{*})-b(x^{*})  
+     \end{align*}    
+\end{thm} 
+\begin{proof}
+    $F(x)\triangleq \frac{1}{2}a(x,x)-b(x) $ and $\alpha \triangleq \underset{x \in X}{\inf } F(x) \leqslant F(0) =0 \textless\infty $ 
+\begin{claim}
+    $\alpha \textgreater -\infty $
+\end{claim} 
+since $a(x,x) \leqslant c_{1}\left\lVert x \right\rVert^2 $ and $b(x) \leqslant c_{2}\left\lVert x \right\rVert $, we see $F(x) \geqslant \frac{1}{2}c_{1}\left\lVert x \right\rVert^2-c_{2}\left\lVert x \right\rVert$, we see from the right hand side is a quadratic function in $\left\lVert x \right\rVert $ that $\alpha \textgreater -\infty  $.
+Now there eixsts $u_n \in X$ such that $F(u_n) \rightarrow \alpha $ as $n \rightarrow \infty $    
+\begin{claim}
+    $u_n$ is Cauchy 
+\end{claim} 
+\begin{align*}
+F(u_n)+F(u_m)&=\frac{1}{2}a(u_n,u_n)-b(u_n)+\frac{1}{2}a(u_m,u_m)-b(u_m) \\ 
+&=\frac{1}{2} \left( a(u_n,u_n)+a(u_m,u_m) \right)-2b(\frac{u_n+u_m}{2} )   \\
+&=2 \left( \frac{1}{2}a(\frac{u_n+u_m}{2} ,\frac{u_n+u_m}{2} )-b(\frac{u_n+u_m}{2} )  \right)-2a(\frac{u_n-u_m}{2},\frac{u_n-u_m}{2}  ) \\
+&=2 F(\frac{u_n+u_m}{2} )+2a(\frac{u_n-u_m}{2},\frac{u_n-u_m}{2}  )\\
+& \geqslant 2 \alpha +2a(\frac{u_n-u_m}{2},\frac{u_n-u_m}{2}  )
+\end{align*} 
+$\implies \left\lVert u_n-u_m \right\rVert^2 \leqslant \frac{4}{c_1}\left\lVert u_n-u_m \right\rVert^2   $ 
+ Fix $\epsilon \textgreater 0 , \exists N_{\epsilon },$ such that $\forall n,m \geqslant N_{\epsilon }, \quad \frac{4}{c_{1}} \left( F(u_n)+F(u_m)-2 \alpha  \right) \leqslant \epsilon ^2  $.
+ So $\left\{ u_n \right\} $ is Cauchy and we call $u=\lim\limits_{n \to \infty}u_n $
+ \begin{claim}
+    $F(u)=\alpha $ 
+ \end{claim}     
+This is easy since $F$ is continuous and $F(u)=F \left( \lim\limits_{n \to \infty} u_n  \right) =\lim\limits_{n \to \infty}F(u_n)=\alpha   $, we thus have proved the existence.\\ 
+Uniqueness: property of a minimizer: suppose $\hat{u }$ is a minimizer, then $\forall x \in X, a(\hat{u ,x})=b(x)$.
+Indeed $\varphi (t)=F(\hat{u}+tx)$, $\varphi (0)$ minimizes at $t=0$ and $\varphi $ is differentiable, then $\varphi ^{\prime} (0)=0$ which is equivalent to the minimizer property of $\hat{u}$.
+Assume $u_0$ and $u_1$ are two minimizers, then $\forall x \in X, a(u_0,x)=a(u_1,x)=b(x)$, then $a(u_0-u_1,x)=0 \forall x \in X$ and $a(u_0-u_1,u_0-u_1)=0$. Positivity of $a$ shows the uniqueness.  
+\end{proof}        
+\begin{thm}[equivalence of the two problems]
+    \begin{align*}
+    \underset{x \in X}{\inf } F(x)=F(x^{*}) \\
+    \Leftarrow \\
+\forall y \in X, a(x^{*},y)=b(y)
+\end{align*} 
+\end{thm}
+The sufficiency has already been proved. For the necessity, take $x \in X$, then \begin{align*}
+F(x)&=F(x^{*}+x-x^{*})\\
+& =\frac{1}{2} a(x^{*}+x-x^{*},x^{*}+x-x^{*})-b(x^{*}+x-x^{*})\\ 
+&=\frac{1}{2}\left( a(x^{*},x^{*})+2a(x^{*},x-x^{*})+a(x-x^{*},x-x^{*}) \right)-b(x^{*})-b(x-x^{*})\\ 
+&=F(x^{*})+\left( a(x^{*},x-x^{*})-b(x-x^{*}) \right)+\frac{1}{2}a(x-x^{*},x-x^{*})   
+ \end{align*}   
+So $\forall x \in X, F(x)\geqslant F(x^{*})$ 
+\section{\textbf{Sobolev Space}}
+$D$ is an open connected subset of $\mathbb{R} ^N$, $\mathcal{C}_{0}^{\infty }(D)=\left\{ \varphi \in \mathcal{C}^{\infty }(D): \mathrm{supp}(\varphi ) \sqsubseteq D  \right\} $.
+$\forall 1 \leqslant j \leqslant N, \forall \varphi ,\psi \in \mathcal{C}_{0}^{\infty}(D),\mathbb{Q} \int_{D} \frac{\partial \varphi }{\partial x_j } \psi \mathrm{d}x =-\int_{D} \varphi \frac{\partial \psi }{\partial x_j}\mathrm{\d}x    $
+Now consider $u,w \in L^2(D), \left\{ h:D \to \mathbb{R} : \int_{D}\left\lvert h(x) \right\rvert^2 \mathrm{d}x \textless\infty    \right\} $ 
+Assume $\forall \varphi \in \mathcal{C}_{0}^{\infty}(D), \int_{D}\frac{\partial \varphi }{\partial x_j} u \mathrm{d}x =-\int_{D} \varphi w \mathrm{d}x   $, we say that $u$ ahs a generalized derivative w.r.t $x_j$ and $w$ is denoted by $\frac{\partial u}{\partial x_j} $.\\
+Observation: Assume $w_{1}$ and $w_{2} \in L^2(D)$ such that $\forall \varphi \in \mathcal{C}_{0}^{\infty}(D), \quad \int_{D}\frac{\partial \varphi }{\partial x_j}u \mathrm{d}x =-\int_{D} \varphi w_{i} \mathrm{d}x, i=1,2  $          
+$\Rightarrow \forall \varphi \in \mathcal{C}_{0}^{\infty}(D), \int_{D} \varphi (w_1-w_2) \mathrm{d}x =0 $.
+Since $\mathcal{C}_{0}^{\infty}(D) $ is dense in $L^2(D)$, we see that $\left\lVert w_1-w_2 \right\rVert^2= \int_{D} \left\lvert w_{1}(x)-w_{2}(X) \right\rvert^2 \mathrm{d}x =0  $, then $w_{1}=w_{2} \mathrm{a.e.} $ in $D$.   
+\begin{eg}
+    $D=\left( -1,1 \right), u(x)=\left\lvert x \right\rvert  $. The generalized derivative is 
+   \begin{align*} u ^{\prime} (x)=
+   \begin{cases}
+    -1 \text{ if }x \textless 0 \\ 
+    \alpha   \text{ if } x=0 \\
+   1 \text{ if } x \textgreater 0
+\end{cases} 
+    \end{align*} 
+\end{eg} 
+\begin{defi}
+   $ H^{1}\triangleq \left\{ u \in L^2(D): \forall 1 \leqslant j \leqslant N, \exists w_{j} \in L^2(D), \forall \varphi \in \mathcal{C}_{0}^{\infty}(D), \quad \int_{D} \frac{\partial \varphi }{\partial x_j}u \mathrm{d}x=-\int_{D} \varphi w_{j} \mathrm{d}x     \right\} $.
+   Define an inner product $\left\langle u,v \right\rangle _{H^1(D)} \triangleq \left\langle u,v \right\rangle _{L^2(D)} +\sum\limits_{j=1}^{N} \left\langle u_j,v_j \right\rangle _{L^2(D)} $ 
+\end{defi} 
+\begin{claim}
+    $\left\langle u,v \right\rangle _{H^1(D)} $ is an inner product.
+\end{claim} 
+\begin{thm}
+    $H^1(D)$ is a Hilbert space 
+\end{thm} 
+\begin{defi}
+$H_{0}^{1}(D)\triangleq  \overline{\mathcal{C}_{0}^{\infty}(D) }^{H^{1}(D)} $  
+\end{defi} 
+This is indeed a closed linear subspace of $H^1(D)$, so $H_{0}^{1}(D)$ is a Hilbert space.  
+\begin{prop}
+    $H_{0}^{1}(D) = \left\{ u \in H^1(D): u=0 \mbox{ on }\partial D \right\} $ 
+\end{prop} 
+\subsection{Dirichlet Problem}
+ $(\mathrm{DP 1} )$ \begin{align*}
+ \begin{cases}
+ - \nabla ^2 u =f  \text{ in }D\\ 
+ u=g  \text{ in } \partial D 
+ \end{cases} 
+  \end{align*} 
+Let $w \in \mathcal{C}_{0}^{\infty}(D), \int_{D} -\nabla ^2 u \mathrm{d}x =\int_{D} fw \mathrm{d}x \Leftrightarrow \int_{D} \nabla u \cdot \nabla w \mathrm{d}x =\int_{D} fw \mathrm{d}x    $.
+Assume $u_{g}$ is smooth such that $u_{g}|_{\partial D}=g$. Let $\hat{u}=u-u_{g}$, so \begin{align*}
+\begin{cases}
+- \nabla ^2 \hat{u} =\hat{f}  \text{ in }D\\ 
+\hat{u}=0 \text{ in }\partial D 
+\end{cases} 
+ \end{align*}     
+where $\hat{f}=f-\nabla ^2 u_{g}$ \\
+$(DP2)$ Find $\hat{u} \in H_{0}^{1}(D)$ such that $\forall w \in H_{0}^{1}(D), a(\hat{u},w)=b(w)$ where $a(\varphi ,\psi )\triangleq \int_{D} \nabla ^2\varphi \cdot \nabla ^2 \psi \mathrm{d}x $ and $b(\psi )\triangleq \int_{D} \hat{f}\psi \mathrm{d}x $    
+
+\section{\textbf{Weak formulation of PDEs}}
+
+let $D \subseteq \mathbb{R} ^N$ be an open domain, find $\bar{u}: \bar{D}\to \mathbb{R} $ which is the solution of 
+\begin{align*}
+\begin{cases}
+-\sum\limits_{i,j=1}^{N} \frac{\partial }{\partial x_i} \left( a_{ij}(x)\frac{\partial u}{\partial xx_{j}}(x)  \right)+\lambda (x)u(x) = f(x)    \text{ for } x \in D\\ 
+ u(x)=0 \text{ for } x \in \partial D 
+\end{cases}   
+\end{align*}
+
+$a_{ij}, \lambda, f$ are given, $f \in L^2(D)$.
+\begin{enumerate}
+\item we assume they are continuous on $\bar{D}$  \\ 
+\item $\exists c_{0}\textgreater 0 , \forall x \in D, \forall \xi , \quad \sum\limits_{ij=1}^{N} a_{ij}(x)\xi _{i}\xi _{j} \geqslant c_{0}\left\lVert x \right\rVert^2  $   \\
+\item $\exists \lambda _{0}\textgreater 0 , \forall x \in D, \quad \lambda (x) \geqslant \lambda _{0}$ 
+\end{enumerate}   
+
+We want to define a solution to the Dirichlete problem in the weak sense:\\
+Weak formulation of DP,
+\begin{align*}
+a_{ij}=\begin{cases}
+1  \text{ if } i=j\\ 
+0  \text{ if } i \neq j
+\end{cases}, \lambda (x)\equiv 1
+ \end{align*} 
+
+ If DP has a solution such that $u, \frac{\partial u}{\partial x_{1}},\ldots,\frac{\partial u}{\partial x_{N}}, \nabla ^2(u) \in L^2(D) $, we can multiply the equation 
+ \begin{align*}
+ - \nabla ^2(u) +u =f \text{ in } D
+  \end{align*}  
+by arbitrary $v \in \mathcal{C}_{0}^{\infty}(D) $ 
+\begin{align*}
+\int_{D} \left( -\nabla ^2 u +u \right)v \mathrm{d}x =\int_{D} fv \mathrm{d}x   
+ \end{align*} 
+Using Green's identity: $\forall v \in \mathcal{C}_{0}^{\infty}(D) $, 
+\begin{align*}
+\int_{D} (-\nabla ^2 u)v \mathrm{d}x =\int_{D} \nabla u \cdot \nabla v \mathrm{d}x 
+ \end{align*} 
+
+\begin{align}
+\int_{D} \nabla u \cdot \nabla v \mathrm{d}x +\int_{D} uv \mathrm{d}x = \int_{D} fv \mathrm{d}x  
+ \end{align} 
+
+We want to work in $H_{0}^{1}(D)$ where $H_{0}^{1}(D)=\overline{\mathcal{C}_{0}^{\infty}(D)}^{H^{1}(D)}$: 
+\begin{align*}
+H^{1}(D) = \left\{ \varphi \in L^2(D): \mbox{ generalized partial derivatives }\frac{\partial \varphi }{\partial x_{1}}, \ldots,\frac{\partial \varphi }{\partial x_{N}} \in L^2(D)   \right\} 
+ \end{align*} 
+\begin{align*}
+\left\langle \varphi ,\psi  \right\rangle =\int_{D} \varphi \psi +\int_{D} \nabla \varphi \cdot \nabla \psi 
+ \end{align*} 
+Since $H_{0}^{1}(D) \subseteq H^{1}(D)$ is a subspace, then $H_{0}^{1}(D)$ is equipped with the same inner product as $H^{1}(D)$:
+\begin{align*}
+\left\lVert \varphi  \right\rVert _{H^{1}(D)} = \left( \int_{D} \varphi (x)^2 \mathrm{d}x +\int_{D} \left\lVert \nabla \varphi (x) \right\rVert ^2 \mathrm{d}x   \right)^{1/2}  
+ \end{align*}    
+$H^{1}(D), H_{0}^{1}(D)$ are Hilbert spaces. 
+
+$l: H_{0}^{1}(D) \to \mathbb{R} $ such that $v \mapsto \int_{D} fv$  
+\begin{claim}
+    $l$ is a bounded linear form on $H_{0}^{1}(D)$  
+\end{claim} 
+\begin{proof}
+    Let $v \in H_{0}^{1}(D)$, $\left\lvert l(v) \right\rvert \leqslant \left\lvert \int_{D} fv \right\rvert \leqslant \left( \int_{D} f^2 \right)^{1/2} \left( \int_{D} v^2 \right)^{1/2} =\left\lVert f \right\rVert _{L^2(D)} \left\lVert v \right\rVert _{L^2(D)}     $. 
+    Since $\left\lVert v \right\rVert _{L^2(D)} \leqslant \left\lVert v \right\rVert _{H_{0}^{1}(D)} $, we see $\left\lvert l(v) \right\rvert \leqslant \left\lVert f \right\rVert _{L^2(D)} \left\lVert v \right\rVert _{H_{0}^{1}(D)}   $, 
+    then $\left\lVert l \right\rVert _{H_{0}^{1}(D) ^{\prime} }  \leqslant \left\lVert f \right\rVert _{L^2(D)} $. 
+\end{proof} 
+    From Riesz Representation theorem: $\exists ! u_{l} \in H_{0}^{1}(D), \forall v \in H_{0}^{1}(D), \quad \left\langle u_{l},v \right\rangle _{H^{1}(D)} =l(v)$
+\begin{claim}
+    $u_{l}$ is a weak solution of the Dirichlet Problem with $a_{ij}(x)=\begin{cases}
+    1   \text{ where } i=j\\ 
+    0   \text{ where } i \neq j
+    \end{cases} $  and $\lambda (x) \equiv 1$ 
+\end{claim} 
+Explicitly, $\forall v \in H_{0}^{1}(D)$, \begin{align*} 
+    \int_{D} \nabla u_{l} \cdot \nabla v +u_{l}v \mathrm{d}x =\int_{D} fv \mathrm{d}x 
+\end{align*}
+Further regularity: $\exists h \in L^2(D)$ such that $\forall v \in \mathcal{C}_{0}^{\infty}(D) $  
+\begin{align*}
+\int_{D} \nabla u_{l}\cdot \nabla v =- \int_{D} hv
+ \end{align*} 
+Then $h$ is denoted by $\nabla ^2 u_{l}$  
+\begin{align*}
+\int_{D} \left( -\nabla ^2 u_{l} +u_{l} -f \right) v \mathrm{d}x =0  
+ \end{align*} 
+$\rightarrow$ \begin{align*}
+- \nabla ^2 u_{l} +u_{l} =f \mbox{ in } L^2(D)  \\
+-\nabla ^2 u_{l}(x)+u_{l}(x)=f(x) \mbox{a.e. in }D
+ \end{align*} 
+For the general case: assume all the terms below are $L^2(D)$:
+\begin{align*}
+-\sum\limits_{ij=1}^{N} \frac{\partial }{\partial x_{i}} \left( a_{ij}(x)\frac{\partial u}{\partial x_{j}}(x)  \right)+\lambda (x)u(x)=f(x)   
+ \end{align*} 
+Multiplying on both sides by $v \in \mathcal{C}_{0}^{\infty}(D) $ and integrate:
+\begin{align}
+\int_{D} A(x)\nabla u(x) \cdot \nabla v(x) \mathrm{d}x +\int_{D} \lambda (x)u(x)v(x)\mathrm{d}x =\int_{D} f(x)v(x)\mathrm{d}x   
+ \end{align} 
+where $A(x)= \left\{ a_{ij}(x) \right\}_{ij} $, we must have $\forall v \in H_{0}^{1}(D)$: 
+\begin{align}
+\int_{D} A(x)\nabla u(x) \cdot \nabla v(x)\mathrm{d}x + \int_{D} \lambda (x)u(x)v(x) \mathrm{d}x=\int_{D} f(x)v(x)\mathrm{d}x   
+ \end{align}  
+Now define $a: H_{0}^{1}(D) \times H_{0}^{1}(D) \to \mathbb{R} $ such that $\left( \varphi , \psi  \right) \mapsto \int_{D} A(x)\nabla u(x) \cdot \nabla v(x) \mathrm{d}x +\int_{D} \lambda (x)u(x)v(x)\mathrm{d}x $ 
+\begin{enumerate}
+\item (symmetry): suppose for every $x$, $A(x)$ is a positive definite matrix: $\forall \xi \in \mathbb{R} ^N, \quad \xi ^{T}A(x)\xi \geqslant c_{0}\left\lVert \xi  \right\rVert ^2$, where $c_{0}$ does not depend on $x$      \\ 
+\item (linearity): trivial \\
+\item $a(\varphi ,\varphi )\geqslant 0, \quad a(\varphi ,\varphi )=0, \Rightarrow \varphi =0 \mbox{ in } H_{0}^{1}(D)$  
+\end{enumerate} 
+So $a$ becomes an inner product and we define $\left\lVert \varphi  \right\rVert _{a}=\sqrt{a(\varphi ,\varphi )}  $. Now consider $l: H_{0}^{1}(D) \to \mathbb{R} $ such that $v \mapsto \int_{D} fv$, 
+for any function $v \in H_{0}^{1}(D)$, $\left\lvert l(v) \right\rvert \leqslant \left\lVert f \right\rVert _{L^2(D)} \left\lVert v \right\rVert _{L^2(D)} \mbox{ where }\left\lVert v \right\rVert _{H_{0}^{1}(D)} \leqslant \left\lVert v \right\rVert _{H_{0}^{1}(D)} \leqslant c \left\lVert v \right\rVert _{a}     $  
+In this context, we can apply Riesz Representation Theorem. 
+
+Now remove the assumption that $a$ is symmetric, we need to use Lax-Milgram Theorem. Then we need to assume:
+\begin{enumerate}
+\item $\exists \bar{\lambda } \textgreater 0 $ such that $\lambda (x)\leqslant \bar{\lambda }$   \\ 
+\item $\exists \bar{a_{ij}} \textgreater 0 $, such that $a_{ij}(x) \leqslant \bar{a_{ij}}$  
+\end{enumerate}  
+under these two assumptions, $\exists c \textgreater 0 , \quad \left\lvert a(\varphi ,\psi ) \right\rvert \leqslant c \left\lVert \varphi \right\rVert \left\lVert \psi  \right\rVert   $ 
+
+By Lax-Milgram theorem we get 
+\begin{align*}
+\forall  v \in H_{0}^{1}(D), \quad a(u_{l},v)=l(v) \leftrightarrow \\
+\int_{D} A(x)\nabla u_{l}(x)\cdot \nabla v(x) +\lambda (x)u_{l}(x)v(x)\mathrm{d}x = \int_{D} f(x)v(x) \mathrm{d}x  
+ \end{align*} 
+The boundary condition for $u_{l}$ is satisfied by definition. Assume that $\nabla (A(x)\nabla u_{l}(x))$ exists in a genelized sense, $\int_{D} A(x)\nabla u_{l}(x)\cdot \nabla v(x)=-\int_{D} \nabla (A(x)\nabla u_{l}(x))v(x)\mathrm{d}x $   
+Therefore, $\forall v \in H_{0}^{1}(D)$ 
+\begin{align*}
+\int_{D} \left( -\nabla (A(x)\nabla u_{l}(x))+\lambda (x)u_{l}(x)-f(x) \right)v(x)\mathrm{d}x=0  
+ \end{align*} 
+$\Rightarrow $ 
+\begin{align*}
+-\nabla \left( A(x)\nabla u_{l}(x) \right)+\lambda (x)u_{l}(x)=f(x) \mbox{ in }L^2(D) 
+ \end{align*} 
+
+\begin{rmk}
+    It is indeed possible to show that we have more regularity than $H^{1}(D)$ on $u$ the solution given by Riesz or Lax-Milgram theorems.  
+\end{rmk} 
+
+\section{\textbf{Uniform boundedness Principle}}
+\begin{defi}[Baire Space]
+    $X$ is a Baire space if $\forall \left\{ E_{n} \right\}_{n \geqslant 1} $ family of open and dense subsets of $X$, $\bigcap\limits_{n \geqslant 1} E_n$ is dense in $X$     
+\end{defi} 
+
+\begin{thm}
+    if $X$ is a complete metric space, then $X$ is a Baire space.  
+\end{thm}  
+
+\begin{proof}
+    Omitted.
+\end{proof} 
+
+\begin{thm}[principle of uniform Boundedness]
+    $X$ is a complete metric space, $f_{\alpha }: X \to \mathbb{R} $ is continuous for each $\alpha \in \mathrm{I}  $. Assume $\forall x \in X, \exists 0 \textless M(x) \textless\infty $ such that $\underset{\alpha \in \mathrm{I} }{\sup } \left\lvert f_{\alpha }(x) \right\rvert \leqslant M(x) $,
+    then $\exists G$ nonempty open subset of $X$, $\exists c \textgreater 0 $ such that $\underset{x in G}{\sup } \underset{\alpha \in \mathrm{I} }{\sup } \left\lvert f_{\alpha }(x) \right\rvert \leqslant c $       
+\end{thm} 
+\begin{proof}
+    $n \in \mathbb{N}, F_{n}=\left\{ x \in X: \underset{\alpha \in \mathrm{I} }{\sup } \left\lvert f_{\alpha }(x) \right\rvert \leqslant n  \right\}  $.
+    \begin{claim}
+        $F_{n}$ is closed and $\bigcup\limits_{n \in \mathbb{N} }^{F_{n}}=X$   
+    \end{claim} 
+Let $\left\{ x_p \right\}_{p \geqslant 1} \subseteq F_{n}$, so $\forall p \geqslant 1, \underset{\alpha \in \mathrm{I} }{\sup } \left\lvert f_{\alpha }(x_p) \right\rvert \leqslant n $.
+$\forall p \geqslant 1, \forall \alpha \in \mathrm{I}, \quad \left\lvert f_{\alpha }(x_p) \right\rvert \leqslant n $. $\forall \alpha \in \mathrm{I}, \forall p \geqslant 1, \left\lvert f_{\alpha }(x_p) \right\rvert \leqslant n  $.
+$\Rightarrow \forall \alpha \in \mathrm{I}, \quad f_{\alpha }(x) \leqslant n $.
+$\Rightarrow  \underset{\alpha \in \mathrm{I} }{\sup } \left\lvert f_{\alpha }(x) \right\rvert \leqslant n, \Rightarrow x \in F_{n}$.
+Let $x \in X$, we say that $\exists n_{x} \in \mathbb{N} , x \in F_{n_{x}}$, clearly, $x \in F_{n_{\left\lceil M(x) \right\rceil }}$.
+\begin{claim}
+    $\exists n \in \mathbb{N} , \exists G$ nonempty open subset of $X$, $G \subseteq F_{n}$   
+\end{claim}     
+we prove by contradiction: Assume $\forall n \in \mathbb{N} , \forall G$ nonempty open subset of $X$, $G \cap F_{n}^{c} \neq \varnothing $. We know $E_{n}\triangleq F_{n}^{c}$ is open and dense, so $\bigcap\limits_{n \geqslant 1} E_{n}$ is dense since $X$ is aa Baire space.
+Then $\bigcap\limits_{n \geqslant 1} F_{n}^{c} = \left( \bigcup\limits_{n \geqslant 1} F_{n} \right)^{c} =X^{c}= \varnothing  $, which is a contradiction. SO $\exists G$ nonempty open subset of $X$, $\exists c \in \mathbb{N} $ such that $\underset{x \in G}{\sup } \underset{ \alpha \in \mathrm{I} }{\sup } \left\lvert f_{\alpha }(x) \leqslant c \right\rvert $           
+\end{proof}
+
+\section{\textbf{weak convergence}}
+\begin{defi}[weak convergence]
+    $X$ is $\mathrm{n.v.s.} $, $\left\{ x_{n} \right\}_{n \geqslant 1} $ is a sequence in $X$ and $x \in X$. We say that $x_{n}$ converges weakly towards $x$ if 
+    \begin{align*}
+ \forall l \in X ^{\prime} , \quad l(x_{n}) \to l(x) \mbox{ in } \mathbb{K}  
+     \end{align*}, we denote weak convergence by $x_{n} \stackrel{\mathrm{w}}{\to} x $    
+\end{defi}  
+\begin{rmk}
+    \begin{enumerate}
+    \item Suppose $x_{n} \to x$, then $x_{n} \stackrel{\mathrm{w}}{\to} x$, that is, strong convergence implies weak convergence.   \\ 
+    \item Weak convergence does not immplies strong convergence: $\ell^2=\left\{ \left\{ a_n \right\}_{n \geqslant 1}: \sum\limits_{n \geqslant 1} \left\lvert a_{n} \right\rvert ^2 \textless\infty     \right\} $ 
+    Consider $x^{p}=\left\{ x_{n}^{p} \right\}_{n \geqslant 1} $, where $x_{n}^{p}=\delta _{n,p}$. Let $m \in (\ell ^2)^{\prime} $, we know that, $\exists b \in \ell ^2$ such that $\forall a \in \ell ^2,\quad m(a)=\sum\limits_{n \geqslant 1} a_{n}b_{n} $. 
+    In particular, $m(x^{p})=b_{p}$ and $\left\lvert m(x^{p}) \right\rvert =\left\lvert b_p \right\rvert \to 0  $ as $p \to \infty $ since $\sum\limits_{n \geqslant 1} \left\lvert b_{p} \right\rvert ^2 \textless\infty   $, 
+    so $x^{p} \stackrel{\mathrm{w}}{\to} 0$, while $\left\lVert x^p \right\rVert =\left( \sum\limits_{n \geqslant 1} (x_{n}^{p})^2  \right)^{1/2}=1  $, which implies $x^{p}$ does not strongly converge to $0$          
+    \end{enumerate} 
+\end{rmk} 
+
+\begin{lemma}
+    Let $X$ be $\mathrm{n.v.s.} $ and $\left\{ x_n \right\}_{n \geqslant 1} $ be a sequence, $x \in X$. If 
+    \begin{enumerate}
+    \item $\exists c \textgreater 0 , \forall n \in \mathbb{N} , \quad \left\lVert x_{n} \right\rVert \leqslant c $  \\ 
+    \item $\forall l \in A \subseteq X ^{\prime} \mbox{ where } A \mbox{ is dense in }X ^{\prime} , \quad l(x_n) \to l(x)$ as $n \to \infty $  
+    \end{enumerate}  
+    then $x_n \stackrel{\mathrm{w}}{\to}  x$ as $n \to \infty $     
+\end{lemma} 
+\begin{proof}
+    We show that $\forall m \in X ^{\prime} , \quad m(x_{n}) \to m(x)$ as $n \to \infty $. 
+    
+    Now fix $\epsilon \textgreater \epsilon , \exists l_{\epsilon } \in A$ such that $\left\lvert m-l_{\epsilon } \right\rvert _{X ^{\prime} } \textless \epsilon  $.
+    
+    Fix $\epsilon ^{\prime} \textgreater 0 $     
+
+\begin{align*}
+\left\lvert m(x_n)-m(x) \right\rvert 
+&=\left\lvert m(x_{n}-x) \right\rvert =\left\lvert m(x_{n}-x)-l_{\epsilon }(x_{n}-x)+l_{\epsilon }(x_{n}-x) \right\rvert   \\ 
+& \leqslant \left\lvert m(x_n-x)-l_{\epsilon }(x_n-x) \right\rvert +\left\lvert l_{\epsilon }(x_n-x) \right\rvert  \\ 
+& \leqslant \left\lVert m-l_{\epsilon } \right\rVert \left\lVert x_n-x \right\rVert +\frac{\epsilon ^{\prime} }{2} \leqslant \epsilon (c+\left\lVert x \right\rVert )+\frac{\epsilon ^{\prime} }{2}  
+\end{align*} 
+
+\end{proof} 
+\begin{thm}
+    Let $X$ be a Banach space, $f_{\alpha }: X \to \mathbb{R} , \alpha \in \mathrm{I} $ is such that
+    \begin{enumerate}
+    \item continuous \\ 
+    \item $\forall x,y \in X, f_{\alpha }(x+y)\leqslant f_{\alpha }(x)+f_{\alpha }(y)$ \\ 
+    \item $\forall \lambda \in \mathbb{R} , \left\lvert f_{\alpha }(\lambda x) \right\rvert =\left\lvert \lambda  \right\rvert \left\lvert f_{\alpha }(x) \right\rvert   $ 
+    \end{enumerate}   
+    and $\forall x \in X, \exists 0 \textgreater M(x) \textless\infty ,\quad \underset{\alpha \in \mathrm{I} }{\sup } \left\lvert f_{\alpha }(x) \right\rvert \leqslant M(x)  $, 
+    then $\exists c \textgreater 0 , \forall x \in X, \underset{\alpha \in \mathrm{I} }{\sup } \left\lvert f_{\alpha }(x) \right\rvert \leqslant c \left\lVert x \right\rVert $ 
+\end{thm} 
+\begin{proof}
+    Apply principle of uniform boundedness, $\exists c \textgreater 0 , \exists G$ nonempty open subset of $X$ such that $\underset{x \in G}{\sup } \underset{\alpha \in \mathrm{I} }{\sup } \left\lvert f_{\alpha }(x) \right\rvert \leqslant c $. 
+    Since $G$ is nonempty open set, $\exists z \in G, \exists r \textgreater 0 $ such that $B(z,r)\subseteq G, \quad \underset{x \in B(z,r)}{\sup } \underset{\alpha \in \mathrm{I} }{\sup } \left\lvert f_{\alpha }(x) \right\rvert \leqslant c $.
+    Now take $y \in B(0,r),  \left\lVert y \right\rVert \leqslant r $   
+    \begin{align*}
+    \left\lvert f_{\alpha }(y) \right\rvert = \left\lvert f_{\alpha }(y+z-z) \right\rvert 
+    &\leqslant \left\lvert f_{\alpha }(y+z) +f_{\alpha }(-z) \right\rvert \\ 
+    &\leqslant \left\lvert f_{\alpha }(y+z) \right\rvert +\left\lvert f_{\alpha }(z) \right\rvert 
+     \end{align*}  
+     Since both $z, y+z \in B(z,r), \quad \left\lvert f_{\alpha }(y+z) \right\rvert \leqslant c, \left\lvert f_{\alpha }(z)\leqslant c \right\rvert  $, so $\underset{\alpha \in \mathrm{I} }{\sup } \left\lvert f_{\alpha }(y) \right\rvert \leqslant 2c$.
+     Let $x \in X$ arbitrary, $\frac{x}{\left\lVert x \right\rVert } \frac{r}{2} \in B(0,r)  $, so $\underset{\alpha  \in \mathrm{I} }{\sup } \left\lvert f_{\alpha }(\frac{rx}{2 \left\lVert x \right\rVert } ) \right\rvert \leqslant 2c $. 
+     This means that $\forall \alpha \in \mathrm{I}, \quad \left\lvert f_{\alpha }(\frac{rx}{2 \left\lVert x \right\rVert } ) \right\rvert \leqslant 2c  $. 
+     then $\forall \alpha \in \mathrm{I}, \quad \left\lvert \frac{r}{2 \left\lVert x \right\rVert }  f_{\alpha }(x) \right\rvert  \leqslant 2c$, then $\forall \alpha  \in \mathrm{I}, \left\lvert f_{\alpha }(x) \right\rvert \leqslant \frac{4c}{r} \left\lVert x \right\rVert   $.
+     So $\forall x \in X, \underset{\alpha \in \mathrm{I} }{\sup } \left\lvert f_{\alpha }(x) \right\rvert \leqslant \frac{4c}{r} \left\lVert x \right\rVert   $         
+\end{proof} 
+
+\begin{rmk}
+Let $X$ be a Banach space, $\left\{ l_{\alpha } \right\}_{\alpha \in \mathrm{I} } \subseteq X ^{\prime}  $, $\forall x \in X, \exists M(x), \quad \underset{\alpha \in \mathrm{I} }{\sup } \left\lvert l_{\alpha }(x) \right\rvert \leqslant M(x)$,
+    then $\exists 0 \textless c \textless \infty ,\quad \underset{\alpha \in \mathrm{I} }{\sup } \left\lVert l_{\alpha } \right\rVert \leqslant c $. 
+     \begin{proof}
+        Define $f_{\alpha }(x)\triangleq \left\lvert l_{\alpha }(x) \right\rvert $, then $f_{\alpha }$ satisfies the condition of the above theorem.
+     \end{proof}
+    \end{rmk}
+
+    \begin{rmk}
+    Let $X$ be a $\mathrm{n.v.s.}$, $\left\{ x_{\alpha } \right\}_{\alpha \in \mathrm{I} } \subseteq X ^{\prime}  $ such that $\forall l \in X ^{\prime} , \exists c_{l} \textgreater 0 , \underset{\alpha \in \mathrm{I} }{\sup } \left\lvert l(x_{\alpha }) \right\rvert \leqslant c_{l}$.
+    then $\exists c \textgreater 0 , \underset{\alpha \in \mathrm{I} }{\sup } \left\lVert x_{\alpha } \right\rVert \leqslant c$    
+    \begin{proof}
+        See $L_{\alpha }=x_{\alpha }\in X ^{\prime \prime}$, $\left\lVert L_{\alpha } \right\rVert=\left\lVert x_{\alpha } \right\rVert  $. $\forall l \in X ^{\prime} , \exists c_{l} \textgreater 0 , \underset{\alpha \in \mathrm{I} }{\sup } \left\lvert L_{\alpha }(l) \right\rvert \leqslant c_{l} $,
+        $\Rightarrow  \exists c \textgreater 0 , \underset{\alpha \in \mathrm{I} }{\sup } \left\lVert L_{\alpha } \right\rVert \leqslant c \leftrightarrow \underset{\alpha \in \mathrm{I} }{\sup } \left\lVert x_{\alpha } \right\rVert \leqslant c  $   
+    \end{proof}  
+\end{rmk}
+
+\begin{rmk}
+Let $X$ be $\mathrm{n.v.s.} $, then any weakly converging sequence is bounded.
+\begin{proof}
+     $x_n \stackrel{\mathrm{w}}{\to} x$, then $\forall l \in X ^{\prime} , l(x_{n}) \to l(x)$. Then $\exists c \textgreater 0, \underset{n \in \mathbb{N} }{\sup } \left\lvert l(x_{n}) \right\rvert \leqslant c$. 
+So by remark 2, $\exists 0 \textless K \textless\infty , \quad \underset{n \in \mathbb{N} }{\sup } \left\lVert x_{n} \right\rVert \leqslant K$.
+\end{proof}
+\end{rmk}
+
+\begin{rmk}
+ if $x_n \stackrel{\mathrm{w}}{\to} x$, then $\left\lVert x \right\rVert \leqslant \liminf \left\lVert x_{n} \right\rVert  $   
+    \begin{proof}
+        $x \in X, \exists l \in X ^{\prime} , \left\lVert x \right\rVert=l(x), \left\lVert l \right\rVert=1  $. Clearly, $l(x_n) \to l(x)$. So $\left\lVert x \right\rVert =\left\lvert l(x) \right\rvert  =\lim\limits_{n \to \infty} \left\lvert l(x_{n}) \right\rvert  \leqslant \liminf \left\lVert x_{n} \right\rVert $   
+    \end{proof} 
+\end{rmk} 
+
+\end{document}
